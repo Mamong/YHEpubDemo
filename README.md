@@ -10,3 +10,11 @@ https://blog.csdn.net/survivorsfyh/article/details/88070756
 https://www.jianshu.com/p/298c086cd37c
 
 有什么问题欢迎留言交流.
+
+## todo list
+- [ ] 安全区域适配（safe area support）
+- [ ] 书籍管理(books manage)
+- [ ] 文件打开(file open)
+- [ ] 字体下载(custom font download)
+- [ ] PDF支持(PDF support)
+

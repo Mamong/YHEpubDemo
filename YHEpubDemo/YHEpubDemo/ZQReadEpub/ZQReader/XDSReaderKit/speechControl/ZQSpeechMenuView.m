@@ -58,6 +58,7 @@
     _slider.minimumValue = 0.2;
     _slider.maximumValue = 0.8;
     _slider.tintColor = RGB(253, 85, 103);
+    _slider.continuous = NO;
     [_slider setThumbImage:[UIImage imageNamed:@"RM_3"] forState:UIControlStateNormal];
     [_slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
     NSUserDefaults *useDef = [NSUserDefaults standardUserDefaults];

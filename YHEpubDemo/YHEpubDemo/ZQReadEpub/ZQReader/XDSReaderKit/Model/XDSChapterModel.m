@@ -101,6 +101,16 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
                 NSAttributedString *subAttStr = [chapterAttributeContent attributedSubstringFromRange:NSMakeRange(visibleStringRang.location, visibleStringRang.length)];
                 
                 NSMutableAttributedString *mutableAttStr = [[NSMutableAttributedString alloc] initWithAttributedString:subAttStr];
+                NSString *lastString = pageStrings.lastObject;
+                if(lastString && !([lastString hasSuffix:@"\n"] || [subAttStr.string hasPrefix:@"\n"])){
+                    NSAttributedString *lastAttr = pageAttributeStrings.lastObject;
+                    NSRange range = NSMakeRange(0, lastString.length);
+                    CTParagraphStyleRef paraStyle = (__bridge CTParagraphStyleRef)[lastAttr attribute:NSParagraphStyleAttributeName atIndex:lastString.length-1 longestEffectiveRange:NULL inRange:range];
+                    DTCoreTextParagraphStyle *paragraphStyle = [DTCoreTextParagraphStyle paragraphStyleWithCTParagraphStyle:paraStyle];
+                    paragraphStyle.firstLineHeadIndent = paragraphStyle.headIndent;
+                    NSParagraphStyle *noIndentStyle = [paragraphStyle NSParagraphStyle];
+                    [mutableAttStr addAttribute:NSParagraphStyleAttributeName value:noIndentStyle range:NSMakeRange(0, 1)];
+                }
                 [pageAttributeStrings addObject:mutableAttStr];
                 
                 [pageStrings addObject:subAttStr.string];
@@ -219,8 +229,8 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     //                                           attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:fontSize]}
     //                                              context:nil];
     //    CGFloat headIndent = CGRectGetWidth(headerFrame);
-    
-    CGSize maxImageSize = CGSizeMake(_showBounds.size.width - 20, _showBounds.size.height);
+    // image布局后不会正好在开始位置
+    CGSize maxImageSize = CGSizeMake(_showBounds.size.width - 20, _showBounds.size.height - 20);
     
     NSDictionary *dic = @{NSTextSizeMultiplierDocumentOption:@(fontSize/11.0),
                           DTDefaultLineHeightMultiplier:@1.5,

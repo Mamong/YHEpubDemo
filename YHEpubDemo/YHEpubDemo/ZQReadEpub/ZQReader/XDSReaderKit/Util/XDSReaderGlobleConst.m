@@ -8,8 +8,8 @@
 
 #import "XDSReaderGlobleConst.h"
 
-CGFloat const kReadViewMarginTop = 20.f;
-CGFloat const kReadViewMarginBottom = 20.f;
+CGFloat const kReadViewMarginTop = 44.f;
+CGFloat const kReadViewMarginBottom = 34.f;
 CGFloat const kReadViewMarginLeft = 20.f;
 CGFloat const kReadViewMarginRight = 20.f;
 

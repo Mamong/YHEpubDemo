@@ -247,7 +247,9 @@ NSInteger const kSetingFontSizeButtonTag = 30;
     self.effectArray = @[@"仿真"];
     
     self.fontArray = @[@{@"name":@"系统",@"font":@""},
-                       @{@"name":@"彩云",@"font":@"STCaiyun"},
+                       //@{@"name":@"彩云",@"font":@"STCaiyun"},
+                       //@{@"name":@"琥珀",@"font":@"STHupo"},
+                       @{@"name":@"思源",@"font":@"SourceHanSansCN-Normal"},
                        @{@"name":@"新魏",@"font":@"STXinwei"},
                        @{@"name":@"行楷",@"font":@"STXingkai"}];
 

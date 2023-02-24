@@ -31,8 +31,8 @@ static XDSReadManager *readManager;
 }
 
 + (CGRect)readViewBounds {
-    CGRect bounds = CGRectMake(kReadViewMarginTop,
-                               kReadViewMarginLeft,
+    CGRect bounds = CGRectMake(kReadViewMarginLeft,
+                               kReadViewMarginTop,
                                DEVICE_MAIN_SCREEN_WIDTH_XDSR-kReadViewMarginLeft-kReadViewMarginRight,
                                DEVICE_MAIN_SCREEN_HEIGHT_XDSR-kReadViewMarginTop-kReadViewMarginBottom);
     return bounds;

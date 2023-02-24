@@ -31,102 +31,72 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [[ZQAVSpeechTool alloc]init];
-        
     });
     return instance;
 }
 
 - (void)speechTextWith:(NSString *)text
 {
-    if (!(text.length>0)) {
+    if (text.length == 0) {
         return;
     }
-    if (_avSpeaker) {
-        //把每一页文字拆分成段
-        _paragraphs =[text componentsSeparatedByString:@"\n"];
-        _currentParagraphs = 0;
-        [self speechParagraphWith:_paragraphs[_currentParagraphs]];
-    }else
-    {
+
+    text = [text stringByReplacingOccurrencesOfString:UNICODE_OBJECT_PLACEHOLDER withString:@""];
+    _paragraphs = [text componentsSeparatedByString:@"\n"];
+    _currentParagraphs = 0;
+
+    //初始化要说出的内容
+    [self speechParagraphWith:_paragraphs[_currentParagraphs]];
+}
+
+- (void)speechParagraphWith:(NSString *)Paragraph
+{
+    if (!_avSpeaker) {
+        //在iPhone静音模式开启后,声音无法播放,需要打开后台播放
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+
         //初次阅读
         NSUserDefaults *useDef = [NSUserDefaults standardUserDefaults];
         _rate = [useDef floatForKey:@"speechRate"];
         if (!_rate) {
             _rate = 0.5;
         }
-        _paragraphs =[text componentsSeparatedByString:@"\n"];
-        _currentParagraphs = 0;
-         [[NSNotificationCenter defaultCenter] postNotificationName:@"speechParagraph" object:_paragraphs[_currentParagraphs]];
+
         //初始化语音合成器
         _avSpeaker = [[AVSpeechSynthesizer alloc] init];
         _avSpeaker.delegate = self;
-        //初始化要说出的内容
-        AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:_paragraphs[_currentParagraphs]];
-        //设置语速,语速介于AVSpeechUtteranceMaximumSpeechRate和AVSpeechUtteranceMinimumSpeechRate之间
-        //AVSpeechUtteranceMaximumSpeechRate
-        //AVSpeechUtteranceMinimumSpeechRate
-        //AVSpeechUtteranceDefaultSpeechRate
-        utterance.rate = _rate;
-        
-        //设置音高,[0.5 - 2] 默认 = 1
-        //AVSpeechUtteranceMaximumSpeechRate
-        //AVSpeechUtteranceMinimumSpeechRate
-        //AVSpeechUtteranceDefaultSpeechRate
-        utterance.pitchMultiplier = 1;
-        
-        //设置音量,[0-1] 默认 = 1
-        utterance.volume = 1;
-        
-        //读一段前的停顿时间
-        utterance.preUtteranceDelay = 0.5;
-        //读完一段后的停顿时间
-        utterance.postUtteranceDelay = 0;
-        
-        //设置声音,是AVSpeechSynthesisVoice对象
-        //AVSpeechSynthesisVoice定义了一系列的声音, 主要是不同的语言和地区.
-        //voiceWithLanguage: 根据制定的语言, 获得一个声音.
-        //speechVoices: 获得当前设备支持的声音
-        //currentLanguageCode: 获得当前声音的语言字符串, 比如”ZH-cn”
-        //language: 获得当前的语言
-        //通过特定的语言获得声音
-        AVSpeechSynthesisVoice *voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
-        //通过voicce标示获得声音
-        //AVSpeechSynthesisVoice *voice = [AVSpeechSynthesisVoice voiceWithIdentifier:AVSpeechSynthesisVoiceIdentifierAlex];
-        utterance.voice = voice;
-        //开始朗读
-        [_avSpeaker speakUtterance:utterance];
     }
-                                    
-}
-
-- (void)speechParagraphWith:(NSString *)Paragraph
-{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"speechParagraph" object:Paragraph];
+
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:Paragraph];
+    utterance.pitchMultiplier = 1;
+    utterance.volume = 1;
+    utterance.preUtteranceDelay = 0.5;
+    utterance.postUtteranceDelay = 0;
+
     utterance.rate = _rate;
+    AVSpeechSynthesisVoice *voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"zh-CN"];
+    if (!voice) {
+        //下载
+        return;
+    }
+    utterance.voice = voice;
     [_avSpeaker speakUtterance:utterance];
 }
 //切换语速
 - (void)changeRate:(CGFloat)rate
 {
     _rate = rate;
-    //
-    [_avSpeaker stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];    //初始化语音合成器
-//    _avSpeaker = [[AVSpeechSynthesizer alloc] init];
-//    _avSpeaker.delegate = self;
-    AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:_paragraphs[_currentParagraphs]];
-    utterance.rate = rate;
-    utterance.pitchMultiplier = 1;
-    utterance.volume = 1;
-    utterance.preUtteranceDelay = 0.5;
-    utterance.postUtteranceDelay = 0;
-    
-    
-    [_avSpeaker speakUtterance:utterance];
     NSUserDefaults *useDef = [NSUserDefaults standardUserDefaults];
     [useDef setFloat:rate forKey:@"speechRate"];
     [useDef synchronize];
-    
+
+    [_avSpeaker stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];    //初始化语音合成器
+    _avSpeaker = nil;
+
+    //TODO: 不重新读整个段落
+    [self speechParagraphWith:_paragraphs[_currentParagraphs]];
 }
 
 - (void)pauseSpeech
@@ -151,21 +121,17 @@
     _avSpeaker = nil;
     [XDSReadManager sharedManager].speeching = NO;
      [[NSNotificationCenter defaultCenter] postNotificationName:@"speechDidStop" object:nil];
-
 }
 
 #pragma mark -
 #pragma mark - AVSpeechSynthesizerDelegate
 //已经开始
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didStartSpeechUtterance:(AVSpeechUtterance *)utterance{
-   
+    NSLog(@"%s",__func__);
     
 }
 //已经说完
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance{
-    
-    
-   
     _currentParagraphs+=1;
     if (_currentParagraphs<_paragraphs.count) {
          //读下一段
@@ -205,21 +171,22 @@
 
 //已经暂停
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didPauseSpeechUtterance:(AVSpeechUtterance *)utterance{
-    
+    NSLog(@"%s",__func__);
+
 }
 //已经继续说话
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didContinueSpeechUtterance:(AVSpeechUtterance *)utterance{
-    
+    NSLog(@"%s",__func__);
+
 }
 //已经取消说话
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didCancelSpeechUtterance:(AVSpeechUtterance *)utterance{
-    
+    NSLog(@"%s",__func__);
+
 }
 //将要说某段话
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance{
-    
-//    DebugLog(@"%@",utterance.speechString);
-    
+    NSLog(@"%s",__func__);
 }
 
 @end

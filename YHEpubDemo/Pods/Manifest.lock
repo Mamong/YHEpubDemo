@@ -33,7 +33,7 @@ DEPENDENCIES:
   - SSZipArchive
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - DACircularProgress
     - DTCoreText
     - DTFoundation
@@ -53,4 +53,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7f5bc0c8fdbe1a95027c7690322e0cae11f86ad7
 
-COCOAPODS: 1.5.2
+COCOAPODS: 1.11.3

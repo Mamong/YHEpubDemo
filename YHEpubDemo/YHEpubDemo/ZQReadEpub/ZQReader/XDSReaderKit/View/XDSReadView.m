@@ -57,6 +57,7 @@
         self.content = pageAttributeString.string;
         [self createUI];
         [self reloadView];
+        //[DTCoreTextLayoutFrame setShouldDrawDebugFrames:YES];
     }
     return self;
 }
@@ -440,6 +441,7 @@
     [browser showNextPhotoAnimated:YES];
 
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:browser];
+    nav.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [[UIViewController xds_visiableViewController] presentViewController:nav animated:YES completion:nil];
 }
 

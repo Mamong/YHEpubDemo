@@ -19,12 +19,13 @@
     // Do any additional setup after loading the view.
     
     // 张学良传     TestEpub
-    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"张学良传"withExtension:@"epub"];
+    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"张学良传" withExtension:@"epub"];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         XDSBookModel *bookModel = [XDSBookModel getLocalModelWithURL:fileURL];
         dispatch_async(dispatch_get_main_queue(), ^{
             XDSReadPageViewController *pageView = [[XDSReadPageViewController alloc] init];
+            pageView.modalPresentationStyle = UIModalPresentationOverFullScreen;
             [[XDSReadManager sharedManager] setResourceURL:fileURL];//文件位置
             [[XDSReadManager sharedManager] setBookModel:bookModel];
             [[XDSReadManager sharedManager] setRmDelegate:pageView];
