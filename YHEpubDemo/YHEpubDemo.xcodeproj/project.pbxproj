@@ -10,6 +10,10 @@
 		6BF7E12F1C12B7F7812911F4 /* libPods-YHEpubDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B10A4459C458C3080E1D6D4 /* libPods-YHEpubDemo.a */; };
 		B16E6CC229A869DA00472F4E /* 思源黑体.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B16E6CC129A869DA00472F4E /* 思源黑体.ttf */; };
 		B16E6CC429A89ABA00472F4E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B16E6CC329A89ABA00472F4E /* AVFoundation.framework */; };
+		B16E6CF729A8E04900472F4E /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B16E6CF629A8E04900472F4E /* ShareViewController.m */; };
+		B16E6CFA29A8E04900472F4E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B16E6CF829A8E04900472F4E /* MainInterface.storyboard */; };
+		B16E6CFE29A8E04900472F4E /* YHEpubShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B16E6CF329A8E04800472F4E /* YHEpubShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B16E6D0429A9212000472F4E /* 史铁生-我与地坛.txt in Resources */ = {isa = PBXBuildFile; fileRef = B16E6D0329A9212000472F4E /* 史铁生-我与地坛.txt */; };
 		ED35F3E522297B1B00E470F2 /* ReadEpubVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED35F3E422297B1B00E470F2 /* ReadEpubVC.m */; };
 		ED35F47222297BAB00E470F2 /* XDSReadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ED35F3EC22297BAB00E470F2 /* XDSReadManager.m */; };
 		ED35F47322297BAB00E470F2 /* XDSReadConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = ED35F3ED22297BAB00E470F2 /* XDSReadConfig.m */; };
@@ -85,6 +89,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		B16E6CFC29A8E04900472F4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EDFAD00F222948920059E2C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B16E6CF229A8E04800472F4E;
+			remoteInfo = YHEpubShareExtension;
+		};
 		EDFAD033222948930059E2C4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EDFAD00F222948920059E2C4 /* Project object */;
@@ -101,12 +112,32 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		B16E6D0229A8E04900472F4E /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				B16E6CFE29A8E04900472F4E /* YHEpubShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		7B10A4459C458C3080E1D6D4 /* libPods-YHEpubDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YHEpubDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84737922873718C4241864FC /* Pods-YHEpubDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YHEpubDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-YHEpubDemo/Pods-YHEpubDemo.release.xcconfig"; sourceTree = "<group>"; };
 		A7EB49D043339CCC6A615BB0 /* Pods-YHEpubDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YHEpubDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YHEpubDemo/Pods-YHEpubDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		B16E6CC129A869DA00472F4E /* 思源黑体.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "思源黑体.ttf"; sourceTree = "<group>"; };
 		B16E6CC329A89ABA00472F4E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		B16E6CF329A8E04800472F4E /* YHEpubShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = YHEpubShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B16E6CF529A8E04900472F4E /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		B16E6CF629A8E04900472F4E /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		B16E6CF929A8E04900472F4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		B16E6CFB29A8E04900472F4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B16E6D0329A9212000472F4E /* 史铁生-我与地坛.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "史铁生-我与地坛.txt"; sourceTree = "<group>"; };
 		ED35F3E322297B1B00E470F2 /* ReadEpubVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReadEpubVC.h; sourceTree = "<group>"; };
 		ED35F3E422297B1B00E470F2 /* ReadEpubVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReadEpubVC.m; sourceTree = "<group>"; };
 		ED35F3EB22297BAB00E470F2 /* XDSReadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDSReadOperation.h; sourceTree = "<group>"; };
@@ -251,6 +282,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B16E6CF029A8E04800472F4E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EDFAD014222948920059E2C4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -295,9 +333,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B16E6CF429A8E04900472F4E /* YHEpubShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B16E6CF529A8E04900472F4E /* ShareViewController.h */,
+				B16E6CF629A8E04900472F4E /* ShareViewController.m */,
+				B16E6CF829A8E04900472F4E /* MainInterface.storyboard */,
+				B16E6CFB29A8E04900472F4E /* Info.plist */,
+			);
+			path = YHEpubShareExtension;
+			sourceTree = "<group>";
+		};
 		ED35F3E622297BAB00E470F2 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				B16E6D0329A9212000472F4E /* 史铁生-我与地坛.txt */,
 				ED35F4B022297BBF00E470F2 /* 张学良传.epub */,
 				ED35F4AF22297BBF00E470F2 /* TestEpub.epub */,
 			);
@@ -566,11 +616,11 @@
 		ED35F46C22297BAB00E470F2 /* SDAutoLayout */ = {
 			isa = PBXGroup;
 			children = (
+				ED35F47122297BAB00E470F2 /* UIView+SDAutoLayout.h */,
 				ED35F46D22297BAB00E470F2 /* UIView+SDAutoLayout.m */,
 				ED35F46E22297BAB00E470F2 /* UITableView+SDAutoTableViewCellHeight.h */,
-				ED35F46F22297BAB00E470F2 /* SDAutoLayout.h */,
 				ED35F47022297BAB00E470F2 /* UITableView+SDAutoTableViewCellHeight.m */,
-				ED35F47122297BAB00E470F2 /* UIView+SDAutoLayout.h */,
+				ED35F46F22297BAB00E470F2 /* SDAutoLayout.h */,
 			);
 			path = SDAutoLayout;
 			sourceTree = "<group>";
@@ -581,6 +631,7 @@
 				EDFAD019222948920059E2C4 /* YHEpubDemo */,
 				EDFAD035222948930059E2C4 /* YHEpubDemoTests */,
 				EDFAD040222948930059E2C4 /* YHEpubDemoUITests */,
+				B16E6CF429A8E04900472F4E /* YHEpubShareExtension */,
 				EDFAD018222948920059E2C4 /* Products */,
 				47571C517D9F2E49951E2B94 /* Pods */,
 				92E6144FB3E8892B92F2ECF5 /* Frameworks */,
@@ -593,6 +644,7 @@
 				EDFAD017222948920059E2C4 /* YHEpubDemo.app */,
 				EDFAD032222948930059E2C4 /* YHEpubDemoTests.xctest */,
 				EDFAD03D222948930059E2C4 /* YHEpubDemoUITests.xctest */,
+				B16E6CF329A8E04800472F4E /* YHEpubShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -640,6 +692,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B16E6CF229A8E04800472F4E /* YHEpubShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B16E6CFF29A8E04900472F4E /* Build configuration list for PBXNativeTarget "YHEpubShareExtension" */;
+			buildPhases = (
+				B16E6CEF29A8E04800472F4E /* Sources */,
+				B16E6CF029A8E04800472F4E /* Frameworks */,
+				B16E6CF129A8E04800472F4E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YHEpubShareExtension;
+			productName = YHEpubShareExtension;
+			productReference = B16E6CF329A8E04800472F4E /* YHEpubShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		EDFAD016222948920059E2C4 /* YHEpubDemo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EDFAD046222948930059E2C4 /* Build configuration list for PBXNativeTarget "YHEpubDemo" */;
@@ -649,10 +718,12 @@
 				EDFAD014222948920059E2C4 /* Frameworks */,
 				EDFAD015222948920059E2C4 /* Resources */,
 				F5C06362C829D4DB92A78969 /* [CP] Copy Pods Resources */,
+				B16E6D0229A8E04900472F4E /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B16E6CFD29A8E04900472F4E /* PBXTargetDependency */,
 			);
 			name = YHEpubDemo;
 			productName = YHEpubDemo;
@@ -704,6 +775,9 @@
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = survivorsfyh;
 				TargetAttributes = {
+					B16E6CF229A8E04800472F4E = {
+						CreatedOnToolsVersion = 14.2;
+					};
 					EDFAD016222948920059E2C4 = {
 						CreatedOnToolsVersion = 10.1;
 					};
@@ -733,11 +807,20 @@
 				EDFAD016222948920059E2C4 /* YHEpubDemo */,
 				EDFAD031222948930059E2C4 /* YHEpubDemoTests */,
 				EDFAD03C222948930059E2C4 /* YHEpubDemoUITests */,
+				B16E6CF229A8E04800472F4E /* YHEpubShareExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B16E6CF129A8E04800472F4E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B16E6CFA29A8E04900472F4E /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EDFAD015222948920059E2C4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -748,6 +831,7 @@
 				ED35F49C22297BAB00E470F2 /* XDSNoDataView.xib in Resources */,
 				B16E6CC229A869DA00472F4E /* 思源黑体.ttf in Resources */,
 				ED35F49A22297BAB00E470F2 /* 经纬行楷.ttf in Resources */,
+				B16E6D0429A9212000472F4E /* 史铁生-我与地坛.txt in Resources */,
 				EDFAD027222948930059E2C4 /* Assets.xcassets in Resources */,
 				EDFAD022222948920059E2C4 /* Main.storyboard in Resources */,
 				ED35F49922297BAB00E470F2 /* 经纬新魏.ttf in Resources */,
@@ -812,6 +896,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B16E6CEF29A8E04800472F4E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B16E6CF729A8E04900472F4E /* ShareViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EDFAD013222948920059E2C4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -897,6 +989,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		B16E6CFD29A8E04900472F4E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B16E6CF229A8E04800472F4E /* YHEpubShareExtension */;
+			targetProxy = B16E6CFC29A8E04900472F4E /* PBXContainerItemProxy */;
+		};
 		EDFAD034222948930059E2C4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EDFAD016222948920059E2C4 /* YHEpubDemo */;
@@ -910,6 +1007,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		B16E6CF829A8E04900472F4E /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B16E6CF929A8E04900472F4E /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
 		EDFAD020222948920059E2C4 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -929,6 +1034,60 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		B16E6D0029A8E04900472F4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MNK8735NK3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = YHEpubShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = YHEpubShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 survivorsfyh. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lion.YHProject.YHEpubDemo.YHEpubShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B16E6D0129A8E04900472F4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MNK8735NK3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = YHEpubShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = YHEpubShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 survivorsfyh. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lion.YHProject.YHEpubDemo.YHEpubShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		EDFAD044222948930059E2C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1156,6 +1315,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B16E6CFF29A8E04900472F4E /* Build configuration list for PBXNativeTarget "YHEpubShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B16E6D0029A8E04900472F4E /* Debug */,
+				B16E6D0129A8E04900472F4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EDFAD012222948920059E2C4 /* Build configuration list for PBXProject "YHEpubDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

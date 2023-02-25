@@ -131,6 +131,7 @@ XDSCatalogueViewDelegate
     self.leftView = [[XDSCatalogueView alloc] initWithFrame:frame];
     self.leftView.backgroundColor = READ_BACKGROUND_COLOC;
     self.leftView.cvDelegate = self;
+    self.leftView.hidden = YES;
     [self addSubview:self.leftView];
 }
 //MARK: - ABOUT UI
@@ -177,12 +178,10 @@ XDSCatalogueViewDelegate
 - (void)readSettingView:(XDSReadSettingView *)readSettingView didSelectedTheme:(UIColor *)theme{
     [[XDSReadManager sharedManager] configReadTheme:theme];
 }
-- (void)readSettingView:(XDSReadSettingView *)readSettingView didSelectedEffect:(UIColor *)effect{
-    
-    
-    
-
+- (void)readSettingView:(XDSReadSettingView *)readSettingView didSelectedEffect:(NSInteger)effect{
+    [[XDSReadManager sharedManager]  configReadEffect:effect];
 }
+
 - (void)readSettingView:(XDSReadSettingView *)readSettingView didSelectedFont:(NSString *)font{
     [[XDSReadManager sharedManager] configReadFontName:font];
 }
@@ -243,6 +242,7 @@ XDSCatalogueViewDelegate
     CGRect catalogueViewFrame = self.leftView.frame;
     catalogueViewFrame.origin.x = 0;
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    self.leftView.hidden = NO;
     [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
         self.bottomView.frame = bottomViewFrame;
         self.topView.frame = topFrame;
@@ -333,6 +333,7 @@ XDSCatalogueViewDelegate
             self.leftView.frame = leftViewFrame;
             self.topView.frame = topFrame;
         } completion:^(BOOL finished) {
+            self.leftView.hidden = YES;
             [self removeFromSuperview];
         }];
     }else{

@@ -89,7 +89,7 @@ NSInteger const kSetingFontSizeButtonTag = 30;
     NSInteger count = _effectArray.count;
     CGFloat buttonW = contentW/count;
     for (int i = 0; i < count; i ++) {
-        NSString *effect = _effectArray[i];
+        NSString *effect = _effectArray[i][@"name"];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(tempX + buttonW*i, originY, buttonW, height);
         button.showsTouchWhenHighlighted = YES;
@@ -205,7 +205,7 @@ NSInteger const kSetingFontSizeButtonTag = 30;
     button.selected = YES;
     NSInteger tag = button.tag - kSetingEffectButtonTag;
     if ([self.svDelegate respondsToSelector:@selector(readSettingView:didSelectedEffect:)]) {
-        [self.svDelegate readSettingView:self didSelectedEffect:_effectArray[tag]];
+        [self.svDelegate readSettingView:self didSelectedEffect:[_effectArray[tag][@"effect"] integerValue]];
     }
 }
 - (void)fontButtonClick:(UIButton *)button{
@@ -244,7 +244,8 @@ NSInteger const kSetingFontSizeButtonTag = 30;
                         READ_BACKGROUND_COLOC_3,
                         READ_BACKGROUND_COLOC_4,
                         READ_BACKGROUND_COLOC_5];
-    self.effectArray = @[@"仿真"];
+    self.effectArray = @[@{@"name":@"仿真",@"effect":@"0"},
+                           @{@"name":@"滚动",@"effect":@"1"}];
     
     self.fontArray = @[@{@"name":@"系统",@"font":@""},
                        //@{@"name":@"彩云",@"font":@"STCaiyun"},
