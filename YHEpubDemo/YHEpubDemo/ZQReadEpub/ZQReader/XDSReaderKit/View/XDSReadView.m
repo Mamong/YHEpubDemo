@@ -30,7 +30,7 @@
     NSString *_imagePath;
     NSMutableDictionary *_currentAtt;
     NSRange _currentRange;
-    
+    NSRange _pageRange;
 }
 
 @property (nonatomic,strong) XDSMagnifierView *magnifierView;
@@ -52,12 +52,14 @@
         self.chapterNum = chapterNum;
         self.pageNum = pageNum;
         XDSChapterModel *chapterModel = CURRENT_BOOK_MODEL.chapters[self.chapterNum];
-        NSMutableAttributedString *pageAttributeString = chapterModel.pageAttributeStrings[self.pageNum];
+        //NSMutableAttributedString *pageAttributeString = chapterModel.pageAttributeStrings[self.pageNum];
+        NSMutableAttributedString *pageAttributeString = chapterModel.chapterAttributeContent;
         _readAttributedContent = pageAttributeString;
+        _pageRange = [chapterModel.pageRanges[self.pageNum] rangeValue];
         self.content = pageAttributeString.string;
         [self createUI];
         [self reloadView];
-        //[DTCoreTextLayoutFrame setShouldDrawDebugFrames:YES];
+        [DTCoreTextLayoutFrame setShouldDrawDebugFrames:YES];
     }
     return self;
 }
@@ -98,11 +100,13 @@
     // we draw images and links via subviews provided by delegate methods
     [self.readTextView removeFromSuperview];
     
-    self.readTextView = [[DTAttributedTextContentView alloc] initWithFrame:frame];
+    self.readTextView = [[DTAttributedTextContentView alloc] initWithFrame:frame range:_pageRange];
     self.readTextView.shouldDrawImages = YES;
     self.readTextView.shouldDrawLinks = YES;
+    self.readTextView.layoutFrameHeightIsConstrainedByBounds = YES;
     self.readTextView.delegate = self; // delegate for custom sub views
     self.readTextView.backgroundColor = [UIColor clearColor];
+    //self.readTextView.lineBreakMode = NSLineBreakByCharWrapping;
     [self addSubview:self.readTextView];
     self.readTextView.attributedString = self.readAttributedContent;
 }
@@ -389,10 +393,10 @@
 -(void)showMenu {
     if ([self becomeFirstResponder]) {
         UIMenuController *menuController = [UIMenuController sharedMenuController];
-//        UIMenuItem *menuItemCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(menuCopy:)];
+        UIMenuItem *menuItemCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(menuCopy:)];
         UIMenuItem *menuItemNote = [[UIMenuItem alloc] initWithTitle:@"笔记" action:@selector(menuNote:)];
 //        UIMenuItem *menuItemShare = [[UIMenuItem alloc] initWithTitle:@"分享" action:@selector(menuShare:)];
-        NSArray *menus = @[menuItemNote];
+        NSArray *menus = @[menuItemCopy,menuItemNote];
         [menuController setMenuItems:menus];
         CGRect targetRect = _menuRect;
         
@@ -473,6 +477,7 @@
     [XDSReaderUtil showAlertWithTitle:@"成功复制以下内容" message:pasteboard.string];
     
 }
+
 -(void)menuNote:(id)sender{
     [self hiddenMenu];
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"笔记"
@@ -488,11 +493,12 @@
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
                                                         XDSNoteModel *model = [[XDSNoteModel alloc] init];
-                                                        model.content = [_content substringWithRange:_selectRange];
+        model.content = [_content substringWithRange:self->_selectRange];
                                                         model.note = alertController.textFields.firstObject.text;
                                                         model.date = [NSDate date];
-                                                        XDSChapterModel *chapterModel = CURRENT_RECORD.chapterModel;
-                                                        model.locationInChapterContent = _selectRange.location + [chapterModel.pageLocations[CURRENT_RECORD.currentPage] integerValue];
+//                                                        XDSChapterModel *chapterModel = CURRENT_RECORD.chapterModel;
+                                                        //model.locationInChapterContent = _selectRange.location + [chapterModel.pageLocations[CURRENT_RECORD.currentPage] integerValue];
+        model.locationInChapterContent = self->_selectRange.location;
                                                         [[XDSReadManager sharedManager] addNoteModel:model];
                                                         [self addLineForNote:model];
                                                         [self cancelSelected];

@@ -24,6 +24,7 @@ NSString * const DTAttributedTextContentViewDidFinishLayoutNotification = @"DTAt
 
 @interface DTAttributedTextContentView () <DTAccessibilityViewProxyDelegate>
 {
+    NSRange _range;
 	BOOL _shouldAddFirstLineLeading;
 	BOOL _shouldDrawImages;
 	BOOL _shouldDrawLinks;
@@ -109,6 +110,8 @@ static Class _layerClassToUseForDTAttributedTextContentView = nil;
 - (void)setup
 {
 	self.contentMode = UIViewContentModeTopLeft; // to avoid bitmap scaling effect on resize
+    _range = NSMakeRange(0, 0);
+
 	_shouldLayoutCustomSubviews = YES;
 	
 	// no extra leading is added by default
@@ -156,6 +159,17 @@ static Class _layerClassToUseForDTAttributedTextContentView = nil;
 	}
 	return self;
 }
+
+- (instancetype)initWithFrame:(CGRect)frame range:(NSRange)range
+{
+    if ((self = [super initWithFrame:frame]))
+    {
+        [self setup];
+        _range = range;
+    }
+    return self;
+}
+
 
 - (void)awakeFromNib
 {
@@ -654,7 +668,7 @@ static Class _layerClassToUseForDTAttributedTextContentView = nil;
 {
 	// create a temporary frame, will be cached by the layouter for the given rect
 	CGRect rect = [self _frameForLayoutFrameConstraintedToWidth:width];
-	DTCoreTextLayoutFrame *tmpLayoutFrame = [self.layouter layoutFrameWithRect:rect range:NSMakeRange(0, 0)];
+	DTCoreTextLayoutFrame *tmpLayoutFrame = [self.layouter layoutFrameWithRect:rect range:_range];
 	
 	// assign current layout frame properties to tmpLayoutFrame
 	tmpLayoutFrame.numberOfLines = _numberOfLines;
@@ -882,7 +896,7 @@ static Class _layerClassToUseForDTAttributedTextContentView = nil;
 					rect.size.height = CGFLOAT_HEIGHT_UNKNOWN; // necessary height set as soon as we know it.
 				}
 				
-				_layoutFrame = [theLayouter layoutFrameWithRect:rect range:NSMakeRange(0, 0)];
+				_layoutFrame = [theLayouter layoutFrameWithRect:rect range:_range];
 				_layoutFrame.numberOfLines = _numberOfLines;
 				_layoutFrame.lineBreakMode = _lineBreakMode;
 				_layoutFrame.truncationString = _truncationString;

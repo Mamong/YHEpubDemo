@@ -147,7 +147,7 @@ typedef NSUInteger DTAttributedTextContentViewRelayoutMask;
 	NSAttributedString *_truncationString;
 }
 
-
+- (instancetype)initWithFrame:(CGRect)frame range:(NSRange)range;
 /**
  @name Sizing
  */
@@ -204,6 +204,7 @@ typedef NSUInteger DTAttributedTextContentViewRelayoutMask;
  */
 @property (atomic, strong) DTCoreTextLayoutFrame *layoutFrame;
 
+@property(nonatomic, assign) NSLineBreakMode lineBreakMode;
 
 /**
  @name Working with Custom Subviews

@@ -47,11 +47,13 @@ NSString *const kXDSCatalogueModelChapterEncodeKey = @"chapter";
 
 
 @interface XDSChapterModel ()
-@property (nonatomic, copy) NSAttributedString *chapterAttributeContent;//全章的富文本
+@property (nonatomic, strong) NSMutableAttributedString *chapterAttributeContent;//全章的富文本
 @property (nonatomic, copy) NSString *chapterContent;//全章的纯文本
-@property (nonatomic, copy) NSArray *pageAttributeStrings;//每一页的富文本
+//@property (nonatomic, copy) NSArray *pageAttributeStrings;//每一页的富文本
 @property (nonatomic, copy) NSArray *pageStrings;//每一页的普通文本
 @property (nonatomic, copy) NSArray *pageLocations;//每一页在章节中的位置
+@property (nonatomic, copy) NSArray *pageRanges;//每一页在章节中的位置
+
 @property (nonatomic, assign) NSInteger pageCount;//章节总页数
 @property (nonatomic, copy) NSArray<XDSCatalogueModel *> *catalogueModelArray;//本章所有的目录Model
 @property (nonatomic, copy) NSDictionary *locationWithPageIdMapping;//存放对应id的location，用于根据链接跳转到指定页面
@@ -83,12 +85,13 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
         //        bounds.size.height = bounds.size.height - 20;
         self.showBounds = bounds;
         // Load HTML data
-        NSAttributedString *chapterAttributeContent = [self attributedStringForSnippet];
-        chapterAttributeContent = [self addLineForNotes:chapterAttributeContent];
+        NSAttributedString *chapterAttributeContentRaw = [self attributedStringForSnippet];
+        NSMutableAttributedString *chapterAttributeContent = [self addLineForNotes:chapterAttributeContentRaw];
         
         NSMutableArray *pageAttributeStrings = [NSMutableArray arrayWithCapacity:0];//每一页的富文本
         NSMutableArray *pageStrings = [NSMutableArray arrayWithCapacity:0];//每一页的普通文本
         NSMutableArray *pageLocations = [NSMutableArray arrayWithCapacity:0];//每一页在章节中的位置
+        NSMutableArray *pageRanges = [NSMutableArray array];
         
         DTCoreTextLayouter *layouter = [[DTCoreTextLayouter alloc] initWithAttributedString:chapterAttributeContent];
         NSRange visibleStringRang;
@@ -97,24 +100,16 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
         do {
             @autoreleasepool {
                 visibleframe = [layouter layoutFrameWithRect:bounds range:NSMakeRange(rangeOffset, 0)];
+                //visibleframe.lineBreakMode = NSLineBreakByCharWrapping;
                 visibleStringRang = [visibleframe visibleStringRange];
                 NSAttributedString *subAttStr = [chapterAttributeContent attributedSubstringFromRange:NSMakeRange(visibleStringRang.location, visibleStringRang.length)];
-                
-                NSMutableAttributedString *mutableAttStr = [[NSMutableAttributedString alloc] initWithAttributedString:subAttStr];
-                NSString *lastString = pageStrings.lastObject;
-                if(lastString && !([lastString hasSuffix:@"\n"] || [subAttStr.string hasPrefix:@"\n"])){
-                    NSAttributedString *lastAttr = pageAttributeStrings.lastObject;
-                    NSRange range = NSMakeRange(0, lastString.length);
-                    CTParagraphStyleRef paraStyle = (__bridge CTParagraphStyleRef)[lastAttr attribute:NSParagraphStyleAttributeName atIndex:lastString.length-1 longestEffectiveRange:NULL inRange:range];
-                    DTCoreTextParagraphStyle *paragraphStyle = [DTCoreTextParagraphStyle paragraphStyleWithCTParagraphStyle:paraStyle];
-                    paragraphStyle.firstLineHeadIndent = paragraphStyle.headIndent;
-                    NSParagraphStyle *noIndentStyle = [paragraphStyle NSParagraphStyle];
-                    [mutableAttStr addAttribute:NSParagraphStyleAttributeName value:noIndentStyle range:NSMakeRange(0, 1)];
-                }
-                [pageAttributeStrings addObject:mutableAttStr];
+                //NSMutableAttributedString *mutableAttStr = [[NSMutableAttributedString alloc] initWithAttributedString:subAttStr];
+
+                //[pageAttributeStrings addObject:mutableAttStr];
                 
                 [pageStrings addObject:subAttStr.string];
                 [pageLocations addObject:@(visibleStringRang.location)];
+                [pageRanges addObject:[NSValue valueWithRange:visibleStringRang]];
                 rangeOffset += visibleStringRang.length;
                 
             }
@@ -126,16 +121,17 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
         
         self.chapterAttributeContent = chapterAttributeContent;
         self.chapterContent = chapterAttributeContent.string;
-        self.pageAttributeStrings = pageAttributeStrings;
+        //self.pageAttributeStrings = pageAttributeStrings;
         self.pageStrings = pageStrings;
         self.pageLocations = pageLocations;
+        self.pageRanges = pageRanges;
         self.pageCount = self.pageLocations.count;
         
     }
 }
 
 //TODO:add underline for notes 为笔记添加下划虚线
-- (NSAttributedString *)addLineForNotes:(NSAttributedString *)chapterAttributeContent{
+- (NSMutableAttributedString *)addLineForNotes:(NSAttributedString *)chapterAttributeContent{
     NSMutableAttributedString * mAttribute = [[NSMutableAttributedString alloc] initWithAttributedString:chapterAttributeContent];
     
     for (XDSNoteModel *noteModel in _notes) {
@@ -464,7 +460,7 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     model.originContent = self.originContent;
     model.chapterAttributeContent = self.chapterAttributeContent;
     model.chapterContent = self.chapterContent;
-    model.pageAttributeStrings = self.pageAttributeStrings;
+    //model.pageAttributeStrings = self.pageAttributeStrings;
     model.pageStrings = self.pageStrings;
     model.pageLocations = self.pageLocations;
     model.pageCount = self.pageCount;
@@ -485,6 +481,7 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     [aCoder encodeObject:self.notes forKey:kXDSChapterModelNotesEncodeKey];
     [aCoder encodeObject:self.marks forKey:kXDSChapterModelMarksEncodeKey];
 }
+
 -(id)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
@@ -502,3 +499,19 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
 }
 
 @end
+
+/**
+
+
+
+ //NSString *lastString = pageStrings.lastObject;
+//                if(lastString && !([lastString hasSuffix:@"\n"] || [subAttStr.string hasPrefix:@"\n"])){
+//                    NSAttributedString *lastAttr = pageAttributeStrings.lastObject;
+//                    NSRange range = NSMakeRange(0, lastString.length);
+//                    CTParagraphStyleRef paraStyle = (__bridge CTParagraphStyleRef)[lastAttr attribute:NSParagraphStyleAttributeName atIndex:lastString.length-1 longestEffectiveRange:NULL inRange:range];
+//                    DTCoreTextParagraphStyle *paragraphStyle = [DTCoreTextParagraphStyle paragraphStyleWithCTParagraphStyle:paraStyle];
+//                    paragraphStyle.firstLineHeadIndent = paragraphStyle.headIndent;
+//                    NSParagraphStyle *noIndentStyle = [paragraphStyle NSParagraphStyle];
+//                    [mutableAttStr addAttribute:NSParagraphStyleAttributeName value:noIndentStyle range:NSMakeRange(0, 1)];
+//                }
+ */
