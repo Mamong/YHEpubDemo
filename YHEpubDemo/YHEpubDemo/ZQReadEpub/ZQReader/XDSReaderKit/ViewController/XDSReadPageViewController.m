@@ -9,6 +9,7 @@
 #import "XDSReadPageViewController.h"
 #import "XDSReadMenu.h"
 #import "ZQSpeechMenuView.h"
+
 @interface XDSReadPageViewController ()
 <UIPageViewControllerDelegate,
 UIPageViewControllerDataSource,
@@ -54,6 +55,10 @@ XDSReadManagerDelegate
     _pageViewController.view.frame = self.view.frame;
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
 
 - (void)dealloc
 {
@@ -97,9 +102,9 @@ XDSReadManagerDelegate
 #pragma mark - init
 -(UIPageViewController *)pageViewController{
     if (!_pageViewController) {
-//        NSInteger effect = [XDSReadConfig shareInstance].currentEffect>0?[XDSReadConfig shareInstance].currentEffect:[XDSReadConfig shareInstance].cacheEffect;
-//        effect>0?UIPageViewControllerTransitionStyleScroll:UIPageViewControllerTransitionStylePageCurl
-        _pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+        NSInteger effect = [XDSReadConfig shareInstance].currentEffect>0?[XDSReadConfig shareInstance].currentEffect:[XDSReadConfig shareInstance].cacheEffect;
+        UIPageViewControllerTransitionStyle style = effect>0?UIPageViewControllerTransitionStyleScroll:UIPageViewControllerTransitionStylePageCurl;
+        _pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:style
                                                               navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
                                                                             options:nil];
         _pageViewController.delegate = self;
@@ -112,15 +117,16 @@ XDSReadManagerDelegate
 //MARK: - DELEGATE METHODS
 //TODO: XDSReadManagerDelegate
 - (void)readViewDidClickCloseButton{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
+
 - (void)readViewFontDidChanged {
     _chapter = CURRENT_RECORD.currentChapter;
     _page = CURRENT_RECORD.currentPage;
     XDSReadViewController *readVC = [[XDSReadManager sharedManager] readViewWithChapter:&_chapter
                                                                                    page:&_page
                                                                                 pageUrl:nil];
-    __weak typeof(self) wself = self;
+//    __weak typeof(self) wself = self;
 
     [_pageViewController setViewControllers:@[readVC]
                                   direction:UIPageViewControllerNavigationDirectionForward
@@ -141,13 +147,25 @@ XDSReadManagerDelegate
     readView.view.backgroundColor = theme;
     readView.readView.backgroundColor = theme;
 }
+
 - (void)readViewEffectDidChanged{
-    
-    
-    
-    
-    
+    [_pageViewController willMoveToParentViewController:nil];
+    [_pageViewController.view removeFromSuperview];
+    [_pageViewController removeFromParentViewController];
+     _pageViewController = nil;
+
+    [self addChildViewController:self.pageViewController];
+
+    XDSReadViewController *readVC = [[XDSReadManager sharedManager] readViewWithChapter:&_chapter
+                                                                                   page:&_page
+                                                                                pageUrl:nil];
+
+    [_pageViewController setViewControllers:@[readVC]
+                                  direction:UIPageViewControllerNavigationDirectionForward
+                                   animated:YES
+                                 completion:^(BOOL finished) {}];
 }
+
 - (void)readViewJumpToChapter:(NSInteger)chapter page:(NSInteger)page{
     if (chapter<0) {
         return;

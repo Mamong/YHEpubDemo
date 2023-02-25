@@ -8,7 +8,9 @@
 
 #import "ReadEpubVC.h"
 
-@interface ReadEpubVC ()
+@interface ReadEpubVC ()<UITableViewDelegate, UITableViewDataSource>
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *list;
 
 @end
 
@@ -17,32 +19,75 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    // 张学良传     TestEpub
-    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"张学良传" withExtension:@"epub"];
-    
+
+    self.tableView = [[UITableView alloc] init];
+    self.tableView.rowHeight = 44;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
+
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
+    [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
+    [self.tableView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active = YES;
+    [self.tableView.bottomAnchor  constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+
+    [self loadFiles];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    self.hidesBottomBarWhenPushed = NO;
+}
+
+- (void)loadFiles
+{
+    self.list = [NSMutableArray array];
+    NSArray *epubs = [[NSBundle mainBundle] URLsForResourcesWithExtension:@"epub" subdirectory:nil];
+    NSArray *texts = [[NSBundle mainBundle] URLsForResourcesWithExtension:@"txt" subdirectory:nil];
+    [self.list addObjectsFromArray:epubs];
+    [self.list addObjectsFromArray:texts];
+    [self.tableView reloadData];
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.list.count;
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if(!cell){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    }
+    NSInteger row = indexPath.row;
+    NSURL *path = self.list[row];
+    cell.textLabel.text = path.lastPathComponent;
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger row = indexPath.row;
+    NSURL *path = self.list[row];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        XDSBookModel *bookModel = [XDSBookModel getLocalModelWithURL:fileURL];
+        XDSBookModel *bookModel = [XDSBookModel getLocalModelWithURL:path];
         dispatch_async(dispatch_get_main_queue(), ^{
             XDSReadPageViewController *pageView = [[XDSReadPageViewController alloc] init];
             pageView.modalPresentationStyle = UIModalPresentationOverFullScreen;
-            [[XDSReadManager sharedManager] setResourceURL:fileURL];//文件位置
+            [[XDSReadManager sharedManager] setResourceURL:path];//文件位置
             [[XDSReadManager sharedManager] setBookModel:bookModel];
             [[XDSReadManager sharedManager] setRmDelegate:pageView];
-            [self presentViewController:pageView animated:YES completion:nil];
+            self.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:pageView animated:YES];
         });
     });
-    
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

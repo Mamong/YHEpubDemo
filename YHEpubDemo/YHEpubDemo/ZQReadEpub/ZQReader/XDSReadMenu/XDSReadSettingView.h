@@ -20,7 +20,7 @@
 @protocol XDSReadSettingViewDelegatge <NSObject>
 
 - (void)readSettingView:(XDSReadSettingView *)readSettingView didSelectedTheme:(UIColor *)theme;
-- (void)readSettingView:(XDSReadSettingView *)readSettingView didSelectedEffect:(NSString *)effect;
+- (void)readSettingView:(XDSReadSettingView *)readSettingView didSelectedEffect:(NSInteger)effect;
 - (void)readSettingView:(XDSReadSettingView *)readSettingView didSelectedFont:(NSString *)font;
 - (void)readSettingView:(XDSReadSettingView *)readSettingView didSelectedFontSize:(BOOL)plusSize;
 

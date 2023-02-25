@@ -40,6 +40,8 @@
 /** 设置字体*/
 - (void)configReadFontName:(NSString *)fontName;
 
+- (void)configReadEffect:(NSInteger)effect;
+
 - (void)configReadTheme:(UIColor *)theme;//设置阅读背景
 - (void)updateReadModelWithChapter:(NSInteger)chapter page:(NSInteger)page;//更新阅读记录
 - (void)closeReadView;//关闭阅读器

@@ -20,10 +20,43 @@
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
-    
-    self.window.rootViewController = [[ReadEpubVC alloc] init];
+
+    UINavigationController *shelfNav = [[UINavigationController alloc] initWithRootViewController:[[ReadEpubVC alloc] init]];
+    UITabBarItem *item1 = [[UITabBarItem alloc] initWithTitle:@"书库" image:[UIImage systemImageNamed:@"books.vertical"] tag:0];
+    item1.selectedImage = [UIImage systemImageNamed:@"books.vertical.fill"];
+    shelfNav.tabBarItem = item1;
+
+
+    UINavigationController *downloadNav = [[UINavigationController alloc] initWithRootViewController:[[UIViewController alloc] init]];
+    downloadNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"下载" image:[UIImage systemImageNamed:@"books.vertical"] tag:1];
+
+    UINavigationController *sourceNav = [[UINavigationController alloc] initWithRootViewController:[[UIViewController alloc] init]];
+    sourceNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"书源" image:[UIImage systemImageNamed:@"books.vertical"] tag:1];
+
+    UINavigationController *settingsNav = [[UINavigationController alloc] initWithRootViewController:[[UIViewController alloc] init]];
+    settingsNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"设置" image:[UIImage systemImageNamed:@"books.vertical"] tag:1];
+
+    UITabBarController *tabVC = [[UITabBarController alloc] init];
+    [tabVC setViewControllers:@[shelfNav, downloadNav, sourceNav, settingsNav]];
+
+    self.window.rootViewController = tabVC;
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    if([[url absoluteString] hasPrefix:@"wuwuFQ_shareExtension"]) {
+        return YES;
+    }
+    return NO;
+}
+
+//API_AVAILABLE(ios(9.0));
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    if([[url absoluteString] hasPrefix:@"wuwuFQ_shareExtension"]) {
+        return YES;
+    }
+    return NO;
 }
 
 

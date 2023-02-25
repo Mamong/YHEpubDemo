@@ -145,6 +145,15 @@ static XDSReadManager *readManager;
         [self.rmDelegate readViewThemeDidChanged];
     }
 }
+
+- (void)configReadEffect:(NSInteger)effect{
+
+    [XDSReadConfig shareInstance].currentEffect = effect;
+
+    if (self.rmDelegate && [self.rmDelegate respondsToSelector:@selector(readViewEffectDidChanged)]) {
+        [self.rmDelegate readViewEffectDidChanged];
+    }
+}
 //MARK: - 更新阅读记录
 -(void)updateReadModelWithChapter:(NSInteger)chapter page:(NSInteger)page{
     if (chapter < 0) {
