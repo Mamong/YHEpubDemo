@@ -12,6 +12,8 @@ https://www.jianshu.com/p/298c086cd37c
 有什么问题欢迎留言交流.
 
 ## todo list
+- [x] 支持滚动翻页(support scroll page)
+- [x] 首行排版修复(fix first line layout)
 - [ ] 安全区域适配（safe area support）
 - [ ] 书籍管理(books manage)
 - [ ] 文件打开(file open)
