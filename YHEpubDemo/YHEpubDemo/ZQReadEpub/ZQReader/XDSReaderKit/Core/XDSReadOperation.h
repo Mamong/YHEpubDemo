@@ -16,6 +16,6 @@
  * ePub格式处理
  * 返回章节信息数组
  */
-+ (NSMutableArray *)ePubFileHandle:(NSString *)path bookInfoModel:(LPPBookInfoModel *)bookInfoModel;
++ (NSMutableArray *)ePubFileHandle:(NSString *)path bookInfoModel:(LPPBookInfoModel *)bookInfoModel catalogs:(NSArray**)catalogs;
 
 @end

@@ -207,7 +207,7 @@ XDSCatalogueViewDelegate
     if (chapterModel.locationWithPageIdMapping == nil) {
         [CURRENT_BOOK_MODEL loadContentInChapter:chapterModel];
     }
-    NSString *locationKey = [NSString stringWithFormat:@"${id=%@}", catalogueModel.catalogueId];
+    NSString *locationKey = [NSString stringWithFormat:@"${id=%@}", catalogueModel.anchor];
     NSInteger locationInChapter = [chapterModel.locationWithPageIdMapping[locationKey] integerValue];
     NSInteger page = [chapterModel getPageWithLocationInChapter:locationInChapter];
     [[XDSReadManager sharedManager] readViewJumpToChapter:selectedChapterNum page:page];

@@ -163,7 +163,8 @@ static XDSReadManager *readManager;
         page = 0;
     }
     _bookModel.record.chapterModel = _bookModel.chapters[chapter];
-    _bookModel.record.location = [_bookModel.record.chapterModel.pageLocations[page] integerValue];
+    NSRange pageRange = [_bookModel.record.chapterModel.pageRanges[page] rangeValue];
+    _bookModel.record.location = pageRange.location + pageRange.length - 1;
     _bookModel.record.currentChapter = chapter;
     [XDSBookModel updateLocalModel:_bookModel url:_resourceURL];
     

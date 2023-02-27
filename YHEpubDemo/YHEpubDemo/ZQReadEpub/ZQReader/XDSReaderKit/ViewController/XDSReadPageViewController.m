@@ -104,8 +104,22 @@ XDSReadManagerDelegate
     if (!_pageViewController) {
         NSInteger effect = [XDSReadConfig shareInstance].currentEffect>0?[XDSReadConfig shareInstance].currentEffect:[XDSReadConfig shareInstance].cacheEffect;
         UIPageViewControllerTransitionStyle style = effect>0?UIPageViewControllerTransitionStyleScroll:UIPageViewControllerTransitionStylePageCurl;
+        UIPageViewControllerNavigationOrientation orientation = UIPageViewControllerNavigationOrientationHorizontal;
+        if(effect == 0){
+            style = UIPageViewControllerTransitionStylePageCurl;
+            orientation = UIPageViewControllerNavigationOrientationHorizontal;
+        }else if(effect == 1){
+            style = UIPageViewControllerTransitionStylePageCurl;
+            orientation = UIPageViewControllerNavigationOrientationVertical;
+        }else if(effect == 2){
+            style = UIPageViewControllerTransitionStyleScroll;
+            orientation = UIPageViewControllerNavigationOrientationHorizontal;
+        }else if(effect == 2){
+            style = UIPageViewControllerTransitionStyleScroll;
+            orientation = UIPageViewControllerNavigationOrientationVertical;
+        }
         _pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:style
-                                                              navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                                              navigationOrientation:orientation
                                                                             options:nil];
         _pageViewController.delegate = self;
         _pageViewController.dataSource = self;
@@ -156,12 +170,14 @@ XDSReadManagerDelegate
 
     [self addChildViewController:self.pageViewController];
 
+    NSInteger effect = [XDSReadConfig shareInstance].currentEffect;
+    UIPageViewControllerNavigationDirection direction = effect % 2 == 1 ? UIPageViewControllerNavigationDirectionReverse : UIPageViewControllerNavigationDirectionForward;
     XDSReadViewController *readVC = [[XDSReadManager sharedManager] readViewWithChapter:&_chapter
                                                                                    page:&_page
                                                                                 pageUrl:nil];
 
     [_pageViewController setViewControllers:@[readVC]
-                                  direction:UIPageViewControllerNavigationDirectionForward
+                                  direction:direction
                                    animated:YES
                                  completion:^(BOOL finished) {}];
 }
@@ -271,7 +287,6 @@ XDSReadManagerDelegate
         didFinishAnimating:(BOOL)finished
    previousViewControllers:(NSArray *)previousViewControllers
        transitionCompleted:(BOOL)completed{
-    NSLog(@"1111111111111111111");
     if (!completed) {
         XDSReadViewController *readView = previousViewControllers.firstObject;
         _page = readView.pageNum;

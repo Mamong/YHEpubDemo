@@ -11,6 +11,7 @@
 @property (nonatomic, strong) UILabel *nontLabel;
 @end
 @implementation XDSNoteCell
+
 - (void)awakeFromNib {
     [super awakeFromNib];
 }

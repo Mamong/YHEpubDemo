@@ -17,10 +17,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y16-KA-hc0">
-                                <rect key="frame" x="144" y="409" width="106" height="35"/>
+                                <rect key="frame" x="96" y="356" width="203" height="142"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="books.vertical" catalog="system" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="down" title="Button"/>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="1Xd-am-t49"/>
@@ -33,6 +33,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="books.vertical" catalog="system" width="128" height="107"/>
+        <image name="down" width="128" height="128"/>
     </resources>
 </document>

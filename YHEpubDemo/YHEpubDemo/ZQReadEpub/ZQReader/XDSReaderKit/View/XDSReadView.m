@@ -59,7 +59,7 @@
         self.content = pageAttributeString.string;
         [self createUI];
         [self reloadView];
-        [DTCoreTextLayoutFrame setShouldDrawDebugFrames:YES];
+//        [DTCoreTextLayoutFrame setShouldDrawDebugFrames:YES];
     }
     return self;
 }
@@ -243,6 +243,7 @@
         [self showPhotoBrowserWithImage:imageView.url.path];
     }
 }
+
 - (void)linkPushed:(DTLinkButton *)button{
     
     if ([XDSReadManager sharedManager].speeching) {
@@ -292,30 +293,30 @@
         NSLog(@"xxxxxxxxxxxxxxx");
         NSString *url = [button.URL.absoluteString stringByRemovingPercentEncoding];
         NSArray *pathAndId = [url componentsSeparatedByString:@"#"];
+
+        NSString *anchor = nil;
         url = pathAndId.firstObject;
-        
-        XDSCatalogueModel *catalogueModel;
-        for (XDSChapterModel *chapterModel in CURRENT_BOOK_MODEL.chapters) {
-            if ([url hasSuffix:chapterModel.chapterSrc]) {
-                catalogueModel = [[XDSCatalogueModel alloc] init];
-                catalogueModel.chapter = [CURRENT_BOOK_MODEL.chapters indexOfObject:chapterModel];
-                if (pathAndId.count == 2) {
-                    catalogueModel.catalogueId = pathAndId.lastObject;
-                }
+        if (pathAndId.count == 2) {
+            anchor = pathAndId.lastObject;
+        }
+
+        XDSChapterModel *chapterModel = nil;
+        for (XDSChapterModel *chapter in CURRENT_BOOK_MODEL.chapters) {
+            if ([url hasSuffix:chapter.chapterSrc]) {
+                chapterModel = chapter;
                 break;
             }
         }
+
         
-        if (catalogueModel) {
+        if (chapterModel) {
             //jump to relative chapter and page
-//            NSLog(@"==== chapter");
-            NSInteger selectedChapterNum = catalogueModel.chapter;
-            XDSChapterModel *chapterModel = CURRENT_BOOK_MODEL.chapters[selectedChapterNum];
-            
+            NSInteger selectedChapterNum = [CURRENT_BOOK_MODEL.chapters indexOfObject:chapterModel];
+
             if (chapterModel.locationWithPageIdMapping == nil) {
                 [CURRENT_BOOK_MODEL loadContentInChapter:chapterModel];
             }
-            NSString *locationKey = [NSString stringWithFormat:@"${id=%@}", catalogueModel.catalogueId];
+            NSString *locationKey = [NSString stringWithFormat:@"${id=%@}",anchor];
             NSInteger locationInChapter = [chapterModel.locationWithPageIdMapping[locationKey] integerValue];
             NSInteger page = [chapterModel getPageWithLocationInChapter:locationInChapter];
 
@@ -323,10 +324,8 @@
             [[XDSReadManager sharedManager] readViewJumpToChapter:selectedChapterNum page:page];
             
         }else {
-            [[UIApplication sharedApplication] openURL:button.URL];
+            [[UIApplication sharedApplication] openURL:button.URL options:@{} completionHandler:nil];
         }
-        
-        
     }
 }
 

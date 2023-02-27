@@ -8,12 +8,23 @@
 
 #import <Foundation/Foundation.h>
 
-@interface XDSCatalogueModel : NSObject
+@interface XDSCatalogueModel : NSObject <NSCoding>
+
+@property (nonatomic, copy) NSString *catalogId;
 @property (nonatomic, copy) NSString *catalogueName;
 @property (nonatomic, copy) NSString *link;
-@property (nonatomic, copy) NSString *catalogueId;//if the id is nil, it means the catalogue is the first level catalogue 如果id为空，则为一级目录
 
+@property (nonatomic, readonly) NSString *source;
+@property (nonatomic, readonly) NSString *anchor;//if the id is nil, it means the catalogue is the first level catalogue 如果id为空，则为一级目录
 @property (nonatomic, assign) NSInteger chapter;//章节
+@property (nonatomic, assign) NSInteger level;
+
+@property (nonatomic, assign) NSInteger pageIdx;//章节
+@property (nonatomic, assign, getter=isExpand) BOOL expand;
+
+
+@property (nonatomic, strong) NSArray *children;
+@property (nonatomic, weak) XDSCatalogueModel *parent;
 
 @end
 
@@ -26,10 +37,12 @@ typedef  NS_ENUM(NSInteger,LPPEBookType){
 
 @property (nonatomic, copy) XDSReadConfig *currentConfig;
 
+@property (nonatomic, copy) NSString *chapterName;//章节名称
+///目录可根据此Id找到对应的章节
+@property (nonatomic, copy) NSString *idref;//章节id
 @property (nonatomic, copy) NSString *chapterSrc;//epub章节路径，加载epub内容时使用该字段
 @property (nonatomic, copy) NSString *originContent;//txt原始内容，加载txt内容时使用该字段
 
-@property (nonatomic, copy) NSString *chapterName;//章节名称
 @property (nonatomic, readonly) NSMutableAttributedString *chapterAttributeContent;//全章的富文本
 @property (nonatomic, readonly) NSString *chapterContent;//全章的out文本
 //@property (nonatomic, readonly) NSArray *pageAttributeStrings;//每一页的富文本
@@ -40,6 +53,7 @@ typedef  NS_ENUM(NSInteger,LPPEBookType){
 
 - (void)setCatalogueModelArray:(NSArray<XDSCatalogueModel *> *)catalogueModelArray;
 @property (nonatomic, readonly) NSArray<XDSCatalogueModel *> *catalogueModelArray;//本章所有二级目录的Model
+
 @property (nonatomic, readonly) NSDictionary *locationWithPageIdMapping;//存放对应id的location，用于根据链接跳转到指定页面   @{NSString:NSNumber}
 
 @property (nonatomic, readonly) NSArray<NSString *> *imageSrcArray;//本章所有图片的链接
@@ -47,11 +61,10 @@ typedef  NS_ENUM(NSInteger,LPPEBookType){
 @property (nonatomic, readonly) NSArray<XDSMarkModel *>*marks;
 
 - (void)paginateEpubWithBounds:(CGRect)bounds;
+
 - (void)addNote:(XDSNoteModel *)noteModel;//insert a book note into chapter 向该章节中插入一条笔记
 
 - (void)delNote:(XDSNoteModel *)noteModel;//insert a book note into chapter 向该章节中删除一条笔记
-
-
 
 
 - (void)addOrDeleteABookmark:(XDSMarkModel *)markModel;//insert a bookmark into chapter 向该章节中插入一条书签

@@ -14,6 +14,15 @@
 		B16E6CFA29A8E04900472F4E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B16E6CF829A8E04900472F4E /* MainInterface.storyboard */; };
 		B16E6CFE29A8E04900472F4E /* YHEpubShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B16E6CF329A8E04800472F4E /* YHEpubShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B16E6D0429A9212000472F4E /* 史铁生-我与地坛.txt in Resources */ = {isa = PBXBuildFile; fileRef = B16E6D0329A9212000472F4E /* 史铁生-我与地坛.txt */; };
+		B176107629AB26AA0054E64E /* BookSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B176107529AB26AA0054E64E /* BookSourceViewController.m */; };
+		B176107929AB2A690054E64E /* WKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B176107829AB2A690054E64E /* WKWebViewController.m */; };
+		B176107C29AB2AEA0054E64E /* WKWebViewControllerEx.m in Sources */ = {isa = PBXBuildFile; fileRef = B176107B29AB2AEA0054E64E /* WKWebViewControllerEx.m */; };
+		B176107F29AB2BCA0054E64E /* WKWebViewController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B176107E29AB2BCA0054E64E /* WKWebViewController.bundle */; };
+		B176108229AB2C1C0054E64E /* BSWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B176108129AB2C1C0054E64E /* BSWebViewController.m */; };
+		B17610B229AB58320054E64E /* FileDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = B17610B129AB58320054E64E /* FileDownloader.m */; };
+		B17610B529AB6E5F0054E64E /* FileItem.m in Sources */ = {isa = PBXBuildFile; fileRef = B17610B429AB6E5F0054E64E /* FileItem.m */; };
+		B191D92C29AC953900928464 /* Vue.js 前端开发 快速入门与专业应用.epub in Resources */ = {isa = PBXBuildFile; fileRef = B191D92B29AC953900928464 /* Vue.js 前端开发 快速入门与专业应用.epub */; };
+		B191D92F29ACA50000928464 /* XDSCatalogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B191D92E29ACA50000928464 /* XDSCatalogCell.m */; };
 		ED35F3E522297B1B00E470F2 /* ReadEpubVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED35F3E422297B1B00E470F2 /* ReadEpubVC.m */; };
 		ED35F47222297BAB00E470F2 /* XDSReadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ED35F3EC22297BAB00E470F2 /* XDSReadManager.m */; };
 		ED35F47322297BAB00E470F2 /* XDSReadConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = ED35F3ED22297BAB00E470F2 /* XDSReadConfig.m */; };
@@ -138,6 +147,22 @@
 		B16E6CF929A8E04900472F4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		B16E6CFB29A8E04900472F4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B16E6D0329A9212000472F4E /* 史铁生-我与地坛.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "史铁生-我与地坛.txt"; sourceTree = "<group>"; };
+		B176107429AB26AA0054E64E /* BookSourceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookSourceViewController.h; sourceTree = "<group>"; };
+		B176107529AB26AA0054E64E /* BookSourceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookSourceViewController.m; sourceTree = "<group>"; };
+		B176107729AB2A690054E64E /* WKWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WKWebViewController.h; sourceTree = "<group>"; };
+		B176107829AB2A690054E64E /* WKWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WKWebViewController.m; sourceTree = "<group>"; };
+		B176107A29AB2AEA0054E64E /* WKWebViewControllerEx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WKWebViewControllerEx.h; sourceTree = "<group>"; };
+		B176107B29AB2AEA0054E64E /* WKWebViewControllerEx.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WKWebViewControllerEx.m; sourceTree = "<group>"; };
+		B176107E29AB2BCA0054E64E /* WKWebViewController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WKWebViewController.bundle; sourceTree = "<group>"; };
+		B176108029AB2C1C0054E64E /* BSWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSWebViewController.h; sourceTree = "<group>"; };
+		B176108129AB2C1C0054E64E /* BSWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSWebViewController.m; sourceTree = "<group>"; };
+		B17610B029AB58320054E64E /* FileDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileDownloader.h; sourceTree = "<group>"; };
+		B17610B129AB58320054E64E /* FileDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileDownloader.m; sourceTree = "<group>"; };
+		B17610B329AB6E5F0054E64E /* FileItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileItem.h; sourceTree = "<group>"; };
+		B17610B429AB6E5F0054E64E /* FileItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileItem.m; sourceTree = "<group>"; };
+		B191D92B29AC953900928464 /* Vue.js 前端开发 快速入门与专业应用.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Vue.js 前端开发 快速入门与专业应用.epub"; sourceTree = "<group>"; };
+		B191D92D29ACA50000928464 /* XDSCatalogCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDSCatalogCell.h; sourceTree = "<group>"; };
+		B191D92E29ACA50000928464 /* XDSCatalogCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XDSCatalogCell.m; sourceTree = "<group>"; };
 		ED35F3E322297B1B00E470F2 /* ReadEpubVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReadEpubVC.h; sourceTree = "<group>"; };
 		ED35F3E422297B1B00E470F2 /* ReadEpubVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReadEpubVC.m; sourceTree = "<group>"; };
 		ED35F3EB22297BAB00E470F2 /* XDSReadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDSReadOperation.h; sourceTree = "<group>"; };
@@ -344,9 +369,62 @@
 			path = YHEpubShareExtension;
 			sourceTree = "<group>";
 		};
+		B176107129AB26530054E64E /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				B17610AF29AB58090054E64E /* Downloader */,
+				B176107D29AB2B440054E64E /* WKWebViewController */,
+				B176107229AB26670054E64E /* BookSource */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		B176107229AB26670054E64E /* BookSource */ = {
+			isa = PBXGroup;
+			children = (
+				B176107329AB267C0054E64E /* ViewController */,
+			);
+			path = BookSource;
+			sourceTree = "<group>";
+		};
+		B176107329AB267C0054E64E /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B176107429AB26AA0054E64E /* BookSourceViewController.h */,
+				B176107529AB26AA0054E64E /* BookSourceViewController.m */,
+				B176108029AB2C1C0054E64E /* BSWebViewController.h */,
+				B176108129AB2C1C0054E64E /* BSWebViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		B176107D29AB2B440054E64E /* WKWebViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B176107E29AB2BCA0054E64E /* WKWebViewController.bundle */,
+				B176107729AB2A690054E64E /* WKWebViewController.h */,
+				B176107829AB2A690054E64E /* WKWebViewController.m */,
+				B176107A29AB2AEA0054E64E /* WKWebViewControllerEx.h */,
+				B176107B29AB2AEA0054E64E /* WKWebViewControllerEx.m */,
+			);
+			path = WKWebViewController;
+			sourceTree = "<group>";
+		};
+		B17610AF29AB58090054E64E /* Downloader */ = {
+			isa = PBXGroup;
+			children = (
+				B17610B029AB58320054E64E /* FileDownloader.h */,
+				B17610B129AB58320054E64E /* FileDownloader.m */,
+				B17610B329AB6E5F0054E64E /* FileItem.h */,
+				B17610B429AB6E5F0054E64E /* FileItem.m */,
+			);
+			path = Downloader;
+			sourceTree = "<group>";
+		};
 		ED35F3E622297BAB00E470F2 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				B191D92B29AC953900928464 /* Vue.js 前端开发 快速入门与专业应用.epub */,
 				B16E6D0329A9212000472F4E /* 史铁生-我与地坛.txt */,
 				ED35F4B022297BBF00E470F2 /* 张学良传.epub */,
 				ED35F4AF22297BBF00E470F2 /* TestEpub.epub */,
@@ -585,21 +663,23 @@
 		ED35F44922297BAB00E470F2 /* Catologue */ = {
 			isa = PBXGroup;
 			children = (
-				ED35F44A22297BAB00E470F2 /* XDSCatalogueViewController.h */,
 				ED35F44B22297BAB00E470F2 /* XDSNoDataView.xib */,
-				ED35F44C22297BAB00E470F2 /* XDSCatalogueView.m */,
 				ED35F44D22297BAB00E470F2 /* XDSCatalogueTabBarController.h */,
-				ED35F44E22297BAB00E470F2 /* XDSNoDataView.h */,
-				ED35F44F22297BAB00E470F2 /* XDSMarkViewController.h */,
-				ED35F45022297BAB00E470F2 /* XDSNoteCell.h */,
-				ED35F45122297BAB00E470F2 /* XDSNoteViewController.h */,
 				ED35F45222297BAB00E470F2 /* XDSCatalogueTabBarController.m */,
-				ED35F45322297BAB00E470F2 /* XDSCatalogueView.h */,
-				ED35F45422297BAB00E470F2 /* XDSCatalogueViewController.m */,
+				ED35F44F22297BAB00E470F2 /* XDSMarkViewController.h */,
 				ED35F45522297BAB00E470F2 /* XDSMarkViewController.m */,
-				ED35F45622297BAB00E470F2 /* XDSNoDataView.m */,
+				ED35F45122297BAB00E470F2 /* XDSNoteViewController.h */,
 				ED35F45722297BAB00E470F2 /* XDSNoteViewController.m */,
+				ED35F45322297BAB00E470F2 /* XDSCatalogueView.h */,
+				ED35F44C22297BAB00E470F2 /* XDSCatalogueView.m */,
+				ED35F44A22297BAB00E470F2 /* XDSCatalogueViewController.h */,
+				ED35F45422297BAB00E470F2 /* XDSCatalogueViewController.m */,
+				ED35F44E22297BAB00E470F2 /* XDSNoDataView.h */,
+				ED35F45622297BAB00E470F2 /* XDSNoDataView.m */,
+				ED35F45022297BAB00E470F2 /* XDSNoteCell.h */,
 				ED35F45822297BAB00E470F2 /* XDSNoteCell.m */,
+				B191D92D29ACA50000928464 /* XDSCatalogCell.h */,
+				B191D92E29ACA50000928464 /* XDSCatalogCell.m */,
 			);
 			path = Catologue;
 			sourceTree = "<group>";
@@ -652,6 +732,7 @@
 		EDFAD019222948920059E2C4 /* YHEpubDemo */ = {
 			isa = PBXGroup;
 			children = (
+				B176107129AB26530054E64E /* Classes */,
 				ED35F3E622297BAB00E470F2 /* Resource */,
 				ED35F3E722297BAB00E470F2 /* ZQReadEpub */,
 				EDFAD01A222948920059E2C4 /* AppDelegate.h */,
@@ -833,9 +914,11 @@
 				ED35F49A22297BAB00E470F2 /* 经纬行楷.ttf in Resources */,
 				B16E6D0429A9212000472F4E /* 史铁生-我与地坛.txt in Resources */,
 				EDFAD027222948930059E2C4 /* Assets.xcassets in Resources */,
+				B191D92C29AC953900928464 /* Vue.js 前端开发 快速入门与专业应用.epub in Resources */,
 				EDFAD022222948920059E2C4 /* Main.storyboard in Resources */,
 				ED35F49922297BAB00E470F2 /* 经纬新魏.ttf in Resources */,
 				ED35F49822297BAB00E470F2 /* 经纬琥珀.ttf in Resources */,
+				B176107F29AB2BCA0054E64E /* WKWebViewController.bundle in Resources */,
 				ED35F49722297BAB00E470F2 /* 经纬彩云.ttf in Resources */,
 				ED35F4B122297BBF00E470F2 /* TestEpub.epub in Resources */,
 			);
@@ -911,7 +994,9 @@
 				ED35F48022297BAB00E470F2 /* ZQSpeechMenuView.m in Sources */,
 				ED35F49E22297BAB00E470F2 /* XDSCatalogueTabBarController.m in Sources */,
 				ED35F4A822297BAB00E470F2 /* XDSMenuBottomView.m in Sources */,
+				B191D92F29ACA50000928464 /* XDSCatalogCell.m in Sources */,
 				ED35F49D22297BAB00E470F2 /* XDSCatalogueView.m in Sources */,
+				B176108229AB2C1C0054E64E /* BSWebViewController.m in Sources */,
 				ED35F4A522297BAB00E470F2 /* XDSReadRootView.m in Sources */,
 				ED35F49622297BAB00E470F2 /* XDSPhotoBrowser.m in Sources */,
 				ED35F47322297BAB00E470F2 /* XDSReadConfig.m in Sources */,
@@ -930,6 +1015,7 @@
 				ED35F48722297BAB00E470F2 /* CXMLElement_ElementTreeExtensions.m in Sources */,
 				ED35F48D22297BAB00E470F2 /* CXMLElement_CreationExtensions.m in Sources */,
 				ED35F48A22297BAB00E470F2 /* CTidy.m in Sources */,
+				B176107C29AB2AEA0054E64E /* WKWebViewControllerEx.m in Sources */,
 				ED35F47622297BAB00E470F2 /* XDSReaderGlobleConst.m in Sources */,
 				ED35F48322297BAB00E470F2 /* CXMLNamespaceNode.m in Sources */,
 				ED35F4A322297BAB00E470F2 /* XDSNoteCell.m in Sources */,
@@ -960,10 +1046,14 @@
 				ED35F4AC22297BAB00E470F2 /* XDSHaloButton.m in Sources */,
 				ED35F48C22297BAB00E470F2 /* CXHTMLDocument.m in Sources */,
 				ED35F49422297BAB00E470F2 /* XDSReadViewController.m in Sources */,
+				B176107929AB2A690054E64E /* WKWebViewController.m in Sources */,
 				EDFAD02D222948930059E2C4 /* main.m in Sources */,
 				ED35F48922297BAB00E470F2 /* CXMLDocument_CreationExtensions.m in Sources */,
 				ED35F49022297BAB00E470F2 /* UIImage+ImageEffects.m in Sources */,
+				B17610B229AB58320054E64E /* FileDownloader.m in Sources */,
 				ED35F47D22297BAB00E470F2 /* UIControl+XDSHyperLink.m in Sources */,
+				B17610B529AB6E5F0054E64E /* FileItem.m in Sources */,
+				B176107629AB26AA0054E64E /* BookSourceViewController.m in Sources */,
 				EDFAD025222948920059E2C4 /* YHEpubDemo.xcdatamodeld in Sources */,
 				ED35F48122297BAB00E470F2 /* CXMLDocument.m in Sources */,
 				ED35F4A022297BAB00E470F2 /* XDSMarkViewController.m in Sources */,
@@ -1210,7 +1300,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/YHEpubDemo/YHEpubDemo-PrefixHeader.pch";
 				INFOPLIST_FILE = YHEpubDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1231,7 +1321,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/YHEpubDemo/YHEpubDemo-PrefixHeader.pch";
 				INFOPLIST_FILE = YHEpubDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

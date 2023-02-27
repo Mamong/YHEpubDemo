@@ -49,6 +49,7 @@
 @property (nonatomic,copy) NSString *content;//电子书文本内容
 @property (nonatomic,assign) LPPEBookType bookType;//电子书类型（txt, epub）
 @property (nonatomic,readonly) NSArray <XDSChapterModel*> *chapters;//章节
+@property (nonatomic,readonly) NSArray <XDSCatalogueModel*> *catalogs;//目录
 @property (nonatomic,readonly) NSArray <XDSChapterModel*> *chapterContainNotes;//包含笔记的章节
 @property (nonatomic,readonly) NSArray <XDSChapterModel*> *chapterContainMarks;//包含书签的章节
 
@@ -58,6 +59,7 @@
 
 - (instancetype)initWithContent:(NSString *)content;
 - (instancetype)initWithePub:(NSString *)ePubPath;
+
 + (void)updateLocalModel:(XDSBookModel *)bookModel url:(NSURL *)url;
 + (id)getLocalModelWithURL:(NSURL *)url;
 

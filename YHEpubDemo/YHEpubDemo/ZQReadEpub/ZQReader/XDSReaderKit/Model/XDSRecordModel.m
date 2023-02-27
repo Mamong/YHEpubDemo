@@ -34,6 +34,7 @@ NSString *const kXDSRecordModelLocationEncodeKey = @"location";
     [aCoder encodeInteger:self.location forKey:kXDSRecordModelLocationEncodeKey];
     [aCoder encodeInteger:self.currentChapter forKey:kXDSRecordModelCurrentChapterEncodeKey];
 }
+
 -(id)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {

@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ReadEpubVC.h"
+#import "BookSourceViewController.h"
 
 @interface AppDelegate ()
 
@@ -30,7 +31,7 @@
     UINavigationController *downloadNav = [[UINavigationController alloc] initWithRootViewController:[[UIViewController alloc] init]];
     downloadNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"下载" image:[UIImage systemImageNamed:@"books.vertical"] tag:1];
 
-    UINavigationController *sourceNav = [[UINavigationController alloc] initWithRootViewController:[[UIViewController alloc] init]];
+    UINavigationController *sourceNav = [[UINavigationController alloc] initWithRootViewController:[[BookSourceViewController alloc] init]];
     sourceNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"书源" image:[UIImage systemImageNamed:@"books.vertical"] tag:1];
 
     UINavigationController *settingsNav = [[UINavigationController alloc] initWithRootViewController:[[UIViewController alloc] init]];

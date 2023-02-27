@@ -4,5 +4,7 @@ target "YHEpubDemo" do
 pod 'SSZipArchive'
 pod 'MWPhotoBrowser', '~> 2.1.2'
 pod 'DTCoreText'
+pod 'Masonry'
+
     
 end
