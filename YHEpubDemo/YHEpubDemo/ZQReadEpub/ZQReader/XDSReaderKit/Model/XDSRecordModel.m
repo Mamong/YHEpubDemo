@@ -58,15 +58,12 @@ NSString *const kXDSRecordModelLocationEncodeKey = @"location";
     }
     
     NSInteger page = 0;
-    if (self.location == [self.chapterModel.pageLocations.lastObject integerValue]) {
-        page = self.chapterModel.pageLocations.count - 1;
-    }else{
-        for (int i = 0; i < self.chapterModel.pageLocations.count; i ++) {
-            NSInteger location = [self.chapterModel.pageLocations[i] integerValue];
-            if (self.location < location) {
-                page = (i > 0)? (i - 1):0;
-                break;
-            }
+    for (int i = 0; i < self.chapterModel.pageLocations.count; i ++) {
+        NSRange range = [self.chapterModel.pageRanges[i] rangeValue];
+        NSInteger location = range.location + range.length - 1;
+        if (self.location <= location) {
+            page = (i > 0)? i:0;
+            break;
         }
     }
     return page;
