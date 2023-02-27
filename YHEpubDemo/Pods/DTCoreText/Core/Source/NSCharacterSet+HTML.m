@@ -131,7 +131,7 @@ static NSCharacterSet *_cssLengthUnitCharacterSet = nil;
 	static dispatch_once_t predicate;
 	
 	dispatch_once(&predicate, ^{
-		_cssLengthUnitCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"pxtem"];
+		_cssLengthUnitCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"pxtrem"];
 	});
 	return _cssLengthUnitCharacterSet;
 }

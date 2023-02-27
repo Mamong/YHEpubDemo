@@ -56,7 +56,7 @@
 		return YES;
 	}
 	
-	if ([numberUnitStr isEqualToString:@"em"] | [numberUnitStr isEqualToString:@"px"] | [numberUnitStr isEqualToString:@"pt"])
+	if ([numberUnitStr isEqualToString:@"em"] | [numberUnitStr isEqualToString:@"px"] | [numberUnitStr isEqualToString:@"pt"] | [numberUnitStr isEqualToString:@"rem"])
 	{
 		return YES;
 	}
@@ -128,6 +128,23 @@
 			// percent value
 			value *= textSize / 100.0f;
 		}
+        else if (ch == 'r') {
+            // rem
+            if (i<stringLength)
+            {
+                if (_characters[i++] == 'e')
+                {
+                    if (i<stringLength){
+
+                        if (_characters[i++] == 'm')
+                        {
+                            // rem value
+                            value *= textSize;
+                        }
+                     }
+                }
+            }
+        }
 		else if (ch == 'e')
 		{
 			if (i<stringLength)

@@ -214,8 +214,8 @@
                    forLayoutFrame:(DTCoreTextLayoutFrame *)layoutFrame {
     UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(frame,1,1) cornerRadius:10];
     
-    //    CGColorRef color = [textBlock.backgroundColor CGColor];
-    CGColorRef color = [[UIColor blueColor] CGColor];
+    //CGColorRef color = [textBlock.backgroundColor CGColor];
+    CGColorRef color = [[UIColor whiteColor] CGColor];
     if (color) {
         CGContextSetFillColorWithColor(context, color);
         CGContextAddPath(context, [roundedRect CGPath]);

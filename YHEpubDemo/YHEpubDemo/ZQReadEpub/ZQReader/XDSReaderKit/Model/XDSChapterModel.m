@@ -257,8 +257,8 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     //                                           attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:fontSize]}
     //                                              context:nil];
     //    CGFloat headIndent = CGRectGetWidth(headerFrame);
-    // image布局后不会正好在开始位置
-    CGSize maxImageSize = CGSizeMake(_showBounds.size.width - 20, _showBounds.size.height - 20);
+    // image布局后不会正好在开始位置，需要去掉段前段后空白
+    CGSize maxImageSize = CGSizeMake(_showBounds.size.width - 20, _showBounds.size.height - 20-20);
     
     NSDictionary *dic = @{NSTextSizeMultiplierDocumentOption:@(fontSize/11.0),
                           DTDefaultLineHeightMultiplier:@1.5,
