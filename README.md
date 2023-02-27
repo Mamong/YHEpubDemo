@@ -1,7 +1,9 @@
 # YHEpubDemo
 Epub 阅读器示例
 
-![](https://upload-images.jianshu.io/upload_images/3095156-e391dc81e2da22be.GIF?imageMogr2/auto-orient/strip)
+![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/Simulator%20Screen%20Recording%20-%20iPhone%2014%20-%202023-02-27%20at%2020.19.03.mp4)
+
+![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/Simulator%20Screen%20Recording%20-%20iPhone%2014%20-%202023-02-27%20at%2020.19.49.mp4)
 
 具体 demo 的配置与使用详见博客
 
