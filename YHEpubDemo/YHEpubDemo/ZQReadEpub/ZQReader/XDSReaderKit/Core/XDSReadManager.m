@@ -31,10 +31,19 @@ static XDSReadManager *readManager;
 }
 
 + (CGRect)readViewBounds {
+    CGFloat topPadding = 20;
+    CGFloat bottomPadding = 20;
+    CGFloat navHeight = 44;
+    if (@available(iOS 11.0, *)) {
+        UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+        topPadding = window.safeAreaInsets.top;
+        bottomPadding = window.safeAreaInsets.bottom;
+    }
+    CGFloat topSafePadding = topPadding + navHeight;
     CGRect bounds = CGRectMake(kReadViewMarginLeft,
-                               kReadViewMarginTop,
+                               topSafePadding,
                                DEVICE_MAIN_SCREEN_WIDTH_XDSR-kReadViewMarginLeft-kReadViewMarginRight,
-                               DEVICE_MAIN_SCREEN_HEIGHT_XDSR-kReadViewMarginTop-kReadViewMarginBottom);
+                               DEVICE_MAIN_SCREEN_HEIGHT_XDSR-topSafePadding-bottomPadding);
     return bounds;
 }
 #pragma mark - 获取对于章节页码的 radViewController

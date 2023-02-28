@@ -17,10 +17,7 @@ UIGestureRecognizerDelegate,
 XDSReadManagerDelegate
 >
 {
-    
-    
-    
-    
+    BOOL _hideStatusBar;
 }
 
 /** 当前显示的章节*/
@@ -46,6 +43,8 @@ XDSReadManagerDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _hideStatusBar = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"XDSReadMenuHideNotification" object:nil];
     [self readPageViewControllerDataInit];
     [self createReadPageViewControllerUI];
 }
@@ -62,10 +61,14 @@ XDSReadManagerDelegate
 
 - (void)dealloc
 {
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
+- (void)receiveNotification:(NSNotification*)noti
+{
+    _hideStatusBar = YES;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
 
 #pragma mark - UI 相关
 - (void)createReadPageViewControllerUI{
@@ -308,6 +311,8 @@ XDSReadManagerDelegate
     XDSReadViewController *readView = _pageViewController.viewControllers.firstObject;
     [readView.readView cancelSelected];
     [self.view addSubview:self.readMenuView];
+    _hideStatusBar = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 //MARK: - OTHER PRIVATE METHODS
 - (XDSReadMenu *)readMenuView{
@@ -350,5 +355,8 @@ XDSReadManagerDelegate
     return UIInterfaceOrientationPortrait;
 }
 
-
+- (BOOL)prefersStatusBarHidden
+{
+    return _hideStatusBar;
+}
 @end

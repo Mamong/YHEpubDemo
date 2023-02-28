@@ -12,6 +12,8 @@
 #import "XDSReadSettingView.h"
 #import "XDSLightView.h"
 #import "XDSCatalogueView.h"
+#import <Masonry/Masonry.h>
+
 /// 阅读页面动画的时间
 CGFloat const kXDSReadMenuAnimateDuration = 0.2f;
 /// BottomView 高
@@ -39,6 +41,9 @@ XDSCatalogueViewDelegate
 @property (strong, nonatomic) UIButton *lightButton;/// 亮度按钮
 @property (strong, nonatomic) XDSReadSettingView *readSettingView;/// 小说阅读设置
 
+@property (strong, nonatomic) MASConstraint *topViewBottomConstraint;/// 小说阅读设置
+@property (strong, nonatomic) MASConstraint *bottomViewBottomConstraint;/// 小说阅读设置
+
 @end
 
 @implementation XDSReadMenu
@@ -56,7 +61,6 @@ XDSCatalogueViewDelegate
 - (void)createReadMenu{
     
     // 隐藏状态栏
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     
     // 允许获取电量信息
     [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
@@ -94,6 +98,10 @@ XDSCatalogueViewDelegate
     self.topView.delegate = self;
     self.topView.backgroundColor = READ_BACKGROUND_COLOC;
     [self addSubview:self.topView];
+    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.mas_equalTo(0);
+        self.topViewBottomConstraint = make.top.mas_equalTo(self.mas_top).offset(-100);
+    }];
 }
 
 //TODO: -- BottomView
@@ -103,6 +111,10 @@ XDSCatalogueViewDelegate
     self.bottomView.backgroundColor = READ_BACKGROUND_COLOC;
     self.bottomView.bvDelegate = self;
     [self addSubview:self.bottomView];
+    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.mas_equalTo(0);
+        self.bottomViewBottomConstraint = make.bottom.mas_equalTo(100);
+    }];
 }
 
 - (void)createSettingView{
@@ -157,6 +169,7 @@ XDSCatalogueViewDelegate
     CGFloat program = CURRENT_RECORD.currentPage/((float)(CURRENT_RECORD.chapterModel.pageCount-1))*100;
     [bottomView setReadProgram:program];
 }
+
 - (void)menuBottomView:(XDSMenuBottomView *)bottomView didSelectedNextButton:(UIButton *)nextButton{
     NSInteger currentChapter = CURRENT_RECORD.currentChapter;
     if (currentChapter < CURRENT_RECORD.totalChapters - 1) {
@@ -167,6 +180,7 @@ XDSCatalogueViewDelegate
     CGFloat program = CURRENT_RECORD.currentPage/((float)(CURRENT_RECORD.chapterModel.pageCount-1))*100;
     [bottomView setReadProgram:program];
 }
+
 - (void)menuBottomView:(XDSMenuBottomView *)bottomView didSelectedSliderValueChanged:(UISlider *)slider{
     
     NSInteger page =ceil((CURRENT_RECORD.chapterModel.pageCount-1)*slider.value);
@@ -218,6 +232,7 @@ XDSCatalogueViewDelegate
     [[XDSReadManager sharedManager] readViewJumpToNote:noteModel];
     [self hideReadMenu];
 }
+
 - (void)catalogueViewDidSelectedMark:(XDSMarkModel *)markModel{
     [[XDSReadManager sharedManager] readViewJumpToMark:markModel];
     [self hideReadMenu];
@@ -229,9 +244,11 @@ XDSCatalogueViewDelegate
 - (void)handleTap:(UITapGestureRecognizer *)tap{
     
 }
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [self hideReadMenu];
 }
+
 //MARK: - OTHER PRIVATE METHODS
 - (void)showCatalogueView{
     CGRect topFrame = CGRectMake(0, -kNavgationBarHeight, DEVICE_MAIN_SCREEN_WIDTH_XDSR, kNavgationBarHeight);
@@ -241,11 +258,13 @@ XDSCatalogueViewDelegate
                                         kXDSReadMenuBottomViewHeight);
     CGRect catalogueViewFrame = self.leftView.frame;
     catalogueViewFrame.origin.x = 0;
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
     self.leftView.hidden = NO;
+    [self needsUpdateConstraints];
     [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
-        self.bottomView.frame = bottomViewFrame;
-        self.topView.frame = topFrame;
+        self.bottomViewBottomConstraint.offset = 100;
+        self.topViewBottomConstraint.offset = -100;
+        [self layoutIfNeeded];
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
             self.leftView.frame = catalogueViewFrame;
@@ -261,8 +280,10 @@ XDSCatalogueViewDelegate
                                          DEVICE_MAIN_SCREEN_HEIGHT_XDSR - kXDSReadMenuLightButtonWH,
                                          DEVICE_MAIN_SCREEN_WIDTH_XDSR,
                                          kXDSReadMenuLightButtonWH);
+    [self setNeedsUpdateConstraints];
     [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
-        self.bottomView.frame = bottomViewFrame;
+        self.bottomViewBottomConstraint.offset = 100;
+        [self layoutIfNeeded];
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
             self.lightView.frame = lightViewFrame;
@@ -278,9 +299,10 @@ XDSCatalogueViewDelegate
                                          DEVICE_MAIN_SCREEN_HEIGHT_XDSR - kXDSReadMenuSettingViewHeight,
                                          DEVICE_MAIN_SCREEN_WIDTH_XDSR,
                                          kXDSReadMenuSettingViewHeight);
-    
+    [self setNeedsUpdateConstraints];
     [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
-        self.bottomView.frame = bottomViewFrame;
+        self.bottomViewBottomConstraint.offset = 100;
+        [self layoutIfNeeded];
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
             self.readSettingView.frame = settingViewFrame;
@@ -291,6 +313,7 @@ XDSCatalogueViewDelegate
     
 }
 - (void)hideReadMenu{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"XDSReadMenuHideNotification" object:nil];
     CGRect topFrame = CGRectMake(0, -kNavgationBarHeight, DEVICE_MAIN_SCREEN_WIDTH_XDSR, kNavgationBarHeight);
     CGRect bottomViewFrame = CGRectMake(0,
                                         DEVICE_MAIN_SCREEN_HEIGHT_XDSR,
@@ -308,38 +331,43 @@ XDSCatalogueViewDelegate
                               0,
                               DEVICE_MAIN_SCREEN_WIDTH_XDSR*3/4,
                               DEVICE_MAIN_SCREEN_HEIGHT_XDSR);
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
+    [self needsUpdateConstraints];
+
     if (CGRectGetMinY(self.readSettingView.frame) < DEVICE_MAIN_SCREEN_HEIGHT_XDSR) {
         //设置页面隐藏时，刷新一遍全文章节
         if ([[XDSReadConfig shareInstance] isReadConfigChanged]) {
             [CURRENT_BOOK_MODEL loadContentForAllChapters];
         }
-        
         [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
             self.readSettingView.frame = settingViewFrame;
-            self.topView.frame = topFrame;
+            self.topViewBottomConstraint.offset = -100;
+            [self layoutIfNeeded];
         } completion:^(BOOL finished) {
             [self removeFromSuperview];
         }];
     }else if (CGRectGetMinY(self.lightView.frame) < DEVICE_MAIN_SCREEN_HEIGHT_XDSR) {
         [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
             self.lightView.frame = lightViewFrame;
-            self.topView.frame = topFrame;
+            self.topViewBottomConstraint.offset = -100;
+            [self layoutIfNeeded];
         } completion:^(BOOL finished) {
             [self removeFromSuperview];
         }];
     }else if (CGRectGetMaxX(self.leftView.frame) > 0) {
         [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
             self.leftView.frame = leftViewFrame;
-            self.topView.frame = topFrame;
+            self.topViewBottomConstraint.offset = -100;
+            [self layoutIfNeeded];
         } completion:^(BOOL finished) {
             self.leftView.hidden = YES;
             [self removeFromSuperview];
         }];
     }else{
         [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
-            self.bottomView.frame = bottomViewFrame;
-            self.topView.frame = topFrame;
+            self.bottomViewBottomConstraint.offset = 100;
+            self.topViewBottomConstraint.offset = -100;
+            [self layoutIfNeeded];
         } completion:^(BOOL finished) {
             [self removeFromSuperview];
         }];
@@ -351,15 +379,17 @@ XDSCatalogueViewDelegate
     [self.bottomView setReadProgram:programe];
     [self.topView updateMarkButtonState];
 }
+
 - (void)didMoveToSuperview{
     [super didMoveToSuperview];
     if (self.superview) {
-        CGRect bottomFrame = CGRectMake(0, DEVICE_MAIN_SCREEN_HEIGHT_XDSR - kXDSReadMenuBottomViewHeight, DEVICE_MAIN_SCREEN_WIDTH_XDSR, kXDSReadMenuBottomViewHeight);
-        CGRect topFrame = CGRectMake(0, 0, DEVICE_MAIN_SCREEN_WIDTH_XDSR, kNavgationBarHeight);
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+//        CGRect bottomFrame = CGRectMake(0, DEVICE_MAIN_SCREEN_HEIGHT_XDSR - kXDSReadMenuBottomViewHeight, DEVICE_MAIN_SCREEN_WIDTH_XDSR, kXDSReadMenuBottomViewHeight);
+//        CGRect topFrame = CGRectMake(0, 0, DEVICE_MAIN_SCREEN_WIDTH_XDSR, kNavgationBarHeight);
+        [self needsUpdateConstraints];
         [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
-            self.bottomView.frame = bottomFrame;
-            self.topView.frame = topFrame;
+            self.bottomViewBottomConstraint.offset = 0;
+            self.topViewBottomConstraint.offset = 0;
+            [self layoutIfNeeded];
         }];
     }
 }

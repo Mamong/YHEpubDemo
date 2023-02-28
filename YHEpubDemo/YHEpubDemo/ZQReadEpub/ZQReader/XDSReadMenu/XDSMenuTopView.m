@@ -7,6 +7,7 @@
 //
 
 #import "XDSMenuTopView.h"
+#import <Masonry/Masonry.h>
 
 @interface XDSMenuTopView ()
 
@@ -32,7 +33,7 @@
 
 //MARK: - ABOUT UI UI相关
 - (void)createUI{
-    CGFloat buttonW = 50;
+    CGFloat buttonW = 28;
     // 返回
     self.backButton = ({
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -63,9 +64,26 @@
         button;
     });
     
+    [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.mas_safeAreaLayoutGuideTop).offset(8);
+        make.left.mas_equalTo(8);
+        make.bottom.mas_equalTo(-8);
+        make.size.mas_equalTo(CGSizeMake(buttonW, buttonW));
+    }];
     
-    
-    
+    [self.voiceButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.mas_safeAreaLayoutGuideTop).offset(8);
+        make.right.mas_equalTo(self.markButton.mas_left).offset(-10);
+        make.bottom.mas_equalTo(-8);
+        make.size.mas_equalTo(CGSizeMake(buttonW, buttonW));
+    }];
+
+    [self.markButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.mas_safeAreaLayoutGuideTop).offset(8);
+        make.right.mas_equalTo(-12);
+        make.bottom.mas_equalTo(-8);
+        make.size.mas_equalTo(CGSizeMake(buttonW, buttonW));
+    }];
     
 }
 //MARK: - DELEGATE METHODS 代理方法
@@ -76,6 +94,7 @@
 - (void)closeButtonClick:(UIButton *)button{
     [[XDSReadManager sharedManager] closeReadView];
 }
+
 - (void)markButtonClick:(UIButton *)button{
     [[XDSReadManager sharedManager] addBookMark];
     [self updateMarkButtonState];
