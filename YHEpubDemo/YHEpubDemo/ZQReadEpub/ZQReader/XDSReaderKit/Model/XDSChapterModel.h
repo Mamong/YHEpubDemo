@@ -26,6 +26,8 @@
 @property (nonatomic, strong) NSArray *children;
 @property (nonatomic, weak) XDSCatalogueModel *parent;
 
+- (XDSCatalogueModel*)nextCatalog;
+- (XDSCatalogueModel*)nextSibling;
 @end
 
 typedef  NS_ENUM(NSInteger,LPPEBookType){
@@ -38,9 +40,11 @@ typedef  NS_ENUM(NSInteger,LPPEBookType){
 @property (nonatomic, copy) XDSReadConfig *currentConfig;
 
 @property (nonatomic, copy) NSString *chapterName;//章节名称
-///目录可根据此Id找到对应的章节
-@property (nonatomic, copy) NSString *idref;//章节id
+
+@property (nonatomic, assign) int chapterIndex;//章节序号
+
 @property (nonatomic, copy) NSString *chapterSrc;//epub章节路径，加载epub内容时使用该字段
+
 @property (nonatomic, copy) NSString *originContent;//txt原始内容，加载txt内容时使用该字段
 
 @property (nonatomic, readonly) NSMutableAttributedString *chapterAttributeContent;//全章的富文本
@@ -69,7 +73,10 @@ typedef  NS_ENUM(NSInteger,LPPEBookType){
 
 - (void)addOrDeleteABookmark:(XDSMarkModel *)markModel;//insert a bookmark into chapter 向该章节中插入一条书签
 
+- (NSInteger)getCatalogLocation:(XDSCatalogueModel*)catalog;
+
 - (NSInteger)getPageWithLocationInChapter:(NSInteger)locationInChapter;
+
 - (XDSCatalogueModel *)getCatalogueModelInChapter:(NSInteger)locationInChapter;
 
 - (BOOL)isMarkAtPage:(NSInteger)page;

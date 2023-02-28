@@ -21,7 +21,6 @@
 NSString *const kXDSCatalogueModelCatalogIdEncodeKey = @"catalogueId";
 NSString *const kXDSCatalogueModelCatalogueNameEncodeKey = @"catalogueName";
 NSString *const kXDSCatalogueModelLinkEncodeKey = @"link";
-NSString *const kXDSCatalogueModelAnchorEncodeKey = @"anchor";
 NSString *const kXDSCatalogueModelChapterEncodeKey = @"chapter";
 NSString *const kXDSCatalogueModelLevelEncodeKey = @"level";
 NSString *const kXDSCatalogueModelChildrenEncodeKey = @"children";
@@ -32,7 +31,6 @@ NSString *const kXDSCatalogueModelParentEncodeKey = @"parent";
     [aCoder encodeObject:self.catalogId forKey:kXDSCatalogueModelCatalogIdEncodeKey];
     [aCoder encodeObject:self.catalogueName forKey:kXDSCatalogueModelCatalogueNameEncodeKey];
     [aCoder encodeObject:self.link forKey:kXDSCatalogueModelLinkEncodeKey];
-    //[aCoder encodeObject:self.anchor forKey:kXDSCatalogueModelAnchorEncodeKey];
     [aCoder encodeInt:(int)self.chapter forKey:kXDSCatalogueModelChapterEncodeKey];
     [aCoder encodeInt:(int)self.level forKey:kXDSCatalogueModelLevelEncodeKey];
     [aCoder encodeObject:self.children forKey:kXDSCatalogueModelChildrenEncodeKey];
@@ -45,7 +43,6 @@ NSString *const kXDSCatalogueModelParentEncodeKey = @"parent";
         self.catalogId = [aDecoder decodeObjectForKey:kXDSCatalogueModelCatalogIdEncodeKey];
         self.catalogueName = [aDecoder decodeObjectForKey:kXDSCatalogueModelCatalogueNameEncodeKey];
         self.link = [aDecoder decodeObjectForKey:kXDSCatalogueModelLinkEncodeKey];
-        //self.anchor = [aDecoder decodeObjectForKey:kXDSCatalogueModelAnchorEncodeKey];
         self.chapter = [aDecoder decodeIntForKey:kXDSCatalogueModelChapterEncodeKey];
         self.level = [aDecoder decodeIntForKey:kXDSCatalogueModelLevelEncodeKey];
         self.children = [aDecoder decodeObjectForKey:kXDSCatalogueModelChildrenEncodeKey];
@@ -74,6 +71,38 @@ NSString *const kXDSCatalogueModelParentEncodeKey = @"parent";
     return _anchor;
 }
 
+- (XDSCatalogueModel*)nextCatalog
+{
+    XDSCatalogueModel *node = self;
+    while (node.level > 0) {
+        //下一个节点优先判断第一个孩子
+        XDSCatalogueModel *firstChild = node.children.firstObject;
+        if(firstChild){
+            return firstChild;
+        }
+        //没有孩子找兄弟
+        XDSCatalogueModel *nextSibling = node.nextSibling;
+        if(nextSibling){
+            return nextSibling;
+        }
+        //没有兄弟就找父节点的兄弟
+        node = self.parent.nextSibling;
+    }
+    return nil;
+}
+
+- (XDSCatalogueModel*)nextSibling
+{
+    if(self.level > 0){
+        XDSCatalogueModel *parent = self.parent;
+        NSInteger index = [parent.children indexOfObject:self];
+        if(index < parent.children.count-1){
+            return parent.children[index+1];
+        }
+    }
+    return nil;
+}
+
 @end
 
 
@@ -99,7 +128,7 @@ NSString *const kXDSCatalogueModelParentEncodeKey = @"parent";
 
 @implementation XDSChapterModel
 
-NSString *const kXDSChapterModelChapterIdrefEncodeKey = @"idref";
+NSString *const kXDSChapterModelChapterIndexEncodeKey = @"chapterIndex";
 NSString *const kXDSChapterModelChapterNameEncodeKey = @"chapterName";
 NSString *const kXDSChapterModelChapterSrcEncodeKey = @"chapterSrc";
 NSString *const kXDSChapterModelOriginContentEncodeKey = @"originContent";
@@ -431,6 +460,18 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     return page;
 }
 
+- (NSInteger)getCatalogLocation:(XDSCatalogueModel*)catalog
+{
+    if(self.locationWithPageIdMapping){
+        NSString *idKey = [NSString stringWithFormat:@"${id=%@}", catalog.anchor];
+        NSNumber *location = self.locationWithPageIdMapping[idKey];
+        if(location){
+            return [location integerValue];
+        }
+    }
+    return 0;
+}
+
 - (XDSCatalogueModel *)getCatalogueModelInChapter:(NSInteger)locationInChapter {
     if (self.catalogueModelArray.count && self.locationWithPageIdMapping) {
         XDSCatalogueModel *targetCatalogue = self.catalogueModelArray.firstObject;
@@ -487,7 +528,7 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
 
 -(id)copyWithZone:(NSZone *)zone{
     XDSChapterModel *model = [[XDSChapterModel allocWithZone:zone] init];
-    //model.idref = self.idref;
+    model.chapterIndex = self.chapterIndex;
     model.chapterName = self.chapterName;
     model.chapterSrc = self.chapterSrc;
     model.originContent = self.originContent;
@@ -505,7 +546,7 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     return model;
 }
 -(void)encodeWithCoder:(NSCoder *)aCoder{
-    //[aCoder encodeObject:self.idref forKey:kXDSChapterModelChapterIdrefEncodeKey];
+    [aCoder encodeInt:self.chapterIndex forKey:kXDSChapterModelChapterIndexEncodeKey];
     [aCoder encodeObject:self.chapterName forKey:kXDSChapterModelChapterNameEncodeKey];
     [aCoder encodeObject:self.chapterSrc forKey:kXDSChapterModelChapterSrcEncodeKey];
     [aCoder encodeObject:self.originContent forKey:kXDSChapterModelOriginContentEncodeKey];
@@ -519,7 +560,7 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
 -(id)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        //self.idref = [aDecoder decodeObjectForKey:kXDSChapterModelChapterIdrefEncodeKey];
+        self.chapterIndex = [aDecoder decodeIntForKey:kXDSChapterModelChapterIndexEncodeKey];
         self.chapterName = [aDecoder decodeObjectForKey:kXDSChapterModelChapterNameEncodeKey];
         self.chapterSrc = [aDecoder decodeObjectForKey:kXDSChapterModelChapterSrcEncodeKey];
         self.originContent = [aDecoder decodeObjectForKey:kXDSChapterModelOriginContentEncodeKey];

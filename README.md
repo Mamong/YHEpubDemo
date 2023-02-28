@@ -33,4 +33,5 @@ https://www.jianshu.com/p/298c086cd37c
 - [ ] 书籍导入(book import)
 - [ ] 页码生成(generate page number)
 - [ ] 显示章节名(display chapter title)
+- [ ] 深色模式(dark theme)
 

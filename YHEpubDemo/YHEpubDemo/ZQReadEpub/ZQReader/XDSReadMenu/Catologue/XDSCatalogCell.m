@@ -68,9 +68,26 @@
     self.titleLabel.text = title;
     self.titleLabel.textColor = [UIColor darkGrayColor];
 
-    if ([CURRENT_RECORD.chapterModel.chapterSrc isEqualToString:model.source]) {
-        if ([CURRENT_RECORD.chapterModel getCatalogueModelInChapter:CURRENT_RECORD.location] == model) {
-            self.titleLabel.textColor = TEXT_COLOR_XDS_2;
+    if (CURRENT_RECORD.chapterModel.chapterIndex == model.chapter) {
+        NSInteger loc = [CURRENT_RECORD.chapterModel getCatalogLocation:model];
+        XDSCatalogueModel *next = model.nextCatalog;
+        NSInteger location = CURRENT_RECORD.location;
+        if(loc <= location){
+            if(next){
+                //同一章节
+                if(model.chapter == next.chapter){
+                    NSInteger nloc = [CURRENT_RECORD.chapterModel getCatalogLocation:next];
+                    if (nloc > location) {
+                        self.titleLabel.textColor = TEXT_COLOR_XDS_2;
+                    }
+                }else{
+                    //非同一章节
+                    self.titleLabel.textColor = TEXT_COLOR_XDS_2;
+                }
+            }else{
+                //没有下一章节
+                self.titleLabel.textColor = TEXT_COLOR_XDS_2;
+            }
         }
     }
     self.moreButtn.selected = model.isExpand;

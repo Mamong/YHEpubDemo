@@ -107,7 +107,7 @@
  *
  * 返回章节信息数组
  */
-+ (NSArray *)ePubFileHandle:(NSString *)path bookInfoModel:(LPPBookInfoModel *)bookInfoModel catalogs:(NSArray**)catalogs{
++ (NSArray *)ePubFileHandle:(NSString *)path bookInfoModel:(LPPBookInfoModel *)bookInfoModel catalog:(XDSCatalogueModel**)catalog{
     // 解压epub文件并返回解压文件夹的相对路径(根路径为document路径)
     NSString *ePubPath = [self unZip:path];// epub 文件解压缩 & 解析
     if (!ePubPath) {
@@ -119,7 +119,7 @@
     bookInfoModel.rootDocumentUrl = ePubPath;
     bookInfoModel.OEBPSUrl = [OPFPath stringByDeletingLastPathComponent];
     
-    return [self parseOPF:OPFPath bookInfoModel:bookInfoModel catalogs:catalogs];// 解析 OPF 文件,从 ncx 读取书籍目录
+    return [self parseOPF:OPFPath bookInfoModel:bookInfoModel catalog:catalog];// 解析 OPF 文件,从 ncx 读取书籍目录
 }
 
 #pragma mark - 解压文件路径(相对路径)
@@ -210,7 +210,7 @@
  @param bookInfoModel 数据填充模型
  @return 结果集
  */
-+ (NSArray *)parseOPF:(NSString *)opfRelativePath bookInfoModel:(LPPBookInfoModel *)bookInfoModel catalogs:(NSArray**)catalogs{
++ (NSArray *)parseOPF:(NSString *)opfRelativePath bookInfoModel:(LPPBookInfoModel *)bookInfoModel catalog:(XDSCatalogueModel**)catalog{
     NSString *opfPath = [APP_SANDBOX_DOCUMENT_PATH stringByAppendingString:opfRelativePath];
     CXMLDocument *opfDocument = [[CXMLDocument alloc] initWithContentsOfURL:[NSURL fileURLWithPath:opfPath] options:0 error:nil];
 
@@ -268,7 +268,7 @@
         NSLog(@"解析OPF文件(异常): %@", error);
     }
 
-    *catalogs = [self readCatalogFromNCX:ncxDoc];
+    *catalog = [self readCatalogFromNCX:ncxDoc];
     
     return [self readChapterFromOPF:opfDocument ncxDoc:ncxDoc];
     
@@ -329,27 +329,19 @@
  @return 数据结果集
  */
 
-+ (NSArray *)readCatalogFromNCX:(CXMLDocument *)ncxDoc{
++ (XDSCatalogueModel *)readCatalogFromNCX:(CXMLDocument *)ncxDoc{
     NSString *xpath = @"//ncx:navMap";
 
     NSError *error;
     // 根据opf文件的href获取到ncx文件中的中对应的目录名称
     //NSArray *navPoints = [ncxDoc nodesForXPath:xpath namespaceMappings:[NSDictionary dictionaryWithObject:@"http://www.daisy.org/z3986/2005/ncx/" forKey:@"ncx"] error:nil];
 
-    CXMLElement *navMap = (CXMLElement*)[ncxDoc nodeForXPath:xpath namespaceMappings:[NSDictionary dictionaryWithObject:@"http://www.daisy.org/z3986/2005/ncx/" forKey:@"ncx"] error:nil];
-    NSArray *navPoints = [navMap elementsForName:@"navPoint"];
+    CXMLElement *navMap = (CXMLElement*)[ncxDoc nodeForXPath:xpath namespaceMappings:[NSDictionary dictionaryWithObject:@"http://www.daisy.org/z3986/2005/ncx/" forKey:@"ncx"] error:&error];
     if (error) {
         NSLog(@"阅读 NCX 文件(异常): %@", error);
     }
-    NSMutableArray *catalogs = [NSMutableArray array];
-    for (int i = 0; i < navPoints.count; i ++) {
-        CXMLElement *element = navPoints[i];
-        XDSCatalogueModel *model = [self getCatalogChildrenFromElem:element level:0];
-        if(model){
-            [catalogs addObject:model];
-        }
-    }
-    return catalogs;
+    XDSCatalogueModel *root = [self getCatalogChildrenFromElem:navMap level:0];
+    return root;
 }
 
 //+ (NSArray *)readCarologueFromNCX:(CXMLDocument *)ncxDoc{
@@ -450,7 +442,7 @@
     /** 子目录*/
     NSArray *subNavPoints = [element elementsForName:@"navPoint"];
 
-    if (!navLabels.count || !contents) {
+    if ((!navLabels.count || !contents.count) && level > 0) {
         return nil;;
     }
     CXMLElement *navLabel = navLabels.firstObject;;
@@ -471,8 +463,8 @@
     catalogueModel.link = chapterSrc;
     catalogueModel.catalogId = catalogId;
     catalogueModel.level = level;
-    NSMutableArray *children = [NSMutableArray array];
 
+    NSMutableArray *children = [NSMutableArray array];
     for (int i = 0; i < subNavPoints.count; i++) {
         CXMLElement *ele = subNavPoints[i];
         XDSCatalogueModel *model = [self getCatalogChildrenFromElem:ele level:level+1];

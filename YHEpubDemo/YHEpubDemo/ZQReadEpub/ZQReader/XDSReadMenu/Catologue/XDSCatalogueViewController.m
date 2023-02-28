@@ -40,8 +40,8 @@ CGFloat const kCatalogueTableViewCellHeight = 44.f;
 
 - (void)reloadData
 {
-    self.catalogs = [NSMutableArray arrayWithArray:CURRENT_BOOK_MODEL.catalogs];
-    NSMutableArray *q = [NSMutableArray arrayWithArray:CURRENT_BOOK_MODEL.catalogs];
+    self.catalogs = [NSMutableArray arrayWithArray:CURRENT_BOOK_MODEL.catalog.children];
+    NSMutableArray *q = [NSMutableArray arrayWithArray:CURRENT_BOOK_MODEL.catalog.children];
     while (q.count > 0) {
         XDSCatalogueModel *top = q[0];
         [q removeObjectAtIndex:0];

@@ -22,6 +22,8 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
 
+    self.title = @"书源";
+
     self.tableView = [[UITableView alloc] init];
     self.tableView.rowHeight = 44;
     self.tableView.delegate = self;
@@ -37,12 +39,44 @@
     self.list = [NSMutableArray arrayWithObject:@{@"name":@"zlib",@"url":@"https://lib-y7x4yvslqzf6chmzs5qzrejc.mountain.pm/"}];
 
     [self.tableView reloadData];
+
+    UIBarButtonItem* addBarItem =  [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onAddAction:)];
+    self.navigationItem.rightBarButtonItem = addBarItem;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     self.hidesBottomBarWhenPushed = NO;
+}
+
+- (void)onAddAction:(UIBarButtonItem*)item
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"添加书源" message:nil
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"输入名称";
+    }];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"输入网址";
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消"
+                                                     style:UIAlertActionStyleCancel
+                                                   handler:nil];
+    UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确认"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+        UITextField *nameTF = alertController.textFields[0];
+        UITextField *urlTF = alertController.textFields[1];
+        NSString *name = nameTF.text;
+        NSString *url = urlTF.text;
+        [self.list addObject:@{@"name":name,@"url":url}];
+        [self.tableView reloadData];
+    }];
+    [alertController addAction:cancel];
+    [alertController addAction:confirm];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark -

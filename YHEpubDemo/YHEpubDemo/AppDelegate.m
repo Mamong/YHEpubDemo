@@ -45,17 +45,24 @@
     return YES;
 }
 
--(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    if([[url absoluteString] hasPrefix:@"wuwuFQ_shareExtension"]) {
-        return YES;
-    }
-    return NO;
-}
-
 //API_AVAILABLE(ios(9.0));
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
     if([[url absoluteString] hasPrefix:@"wuwuFQ_shareExtension"]) {
         return YES;
+    }else if([[url absoluteString] hasPrefix:@"file"]){
+        //分享打开文件
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *downloadDir = [[paths objectAtIndex:0] stringByAppendingString:@"/imports"];
+        //NSURL *downloadPath = [NSURL fileURLWithPath:downloadDir];
+        BOOL isPath = NO;
+        BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:downloadDir isDirectory:&isPath];
+        if(!exists || !isPath){
+            [[NSFileManager defaultManager] createDirectoryAtPath:downloadDir withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+        NSString *destination = [downloadDir stringByAppendingFormat:@"/%@",url.lastPathComponent];
+
+        NSURL *destURL = [NSURL fileURLWithPath:destination];
+        [[NSFileManager defaultManager] copyItemAtURL:url toURL:destURL error:nil];
     }
     return NO;
 }

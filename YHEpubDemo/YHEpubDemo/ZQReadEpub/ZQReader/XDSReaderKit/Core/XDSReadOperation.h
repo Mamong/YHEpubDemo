@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class XDSCatalogueModel;
 
 @interface XDSReadOperation : NSObject
 
@@ -16,6 +17,6 @@
  * ePub格式处理
  * 返回章节信息数组
  */
-+ (NSMutableArray *)ePubFileHandle:(NSString *)path bookInfoModel:(LPPBookInfoModel *)bookInfoModel catalogs:(NSArray**)catalogs;
++ (NSMutableArray *)ePubFileHandle:(NSString *)path bookInfoModel:(LPPBookInfoModel *)bookInfoModel catalog:(XDSCatalogueModel**)catalog;
 
 @end

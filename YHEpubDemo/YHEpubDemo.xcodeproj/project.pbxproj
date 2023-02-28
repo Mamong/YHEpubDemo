@@ -23,6 +23,8 @@
 		B17610B529AB6E5F0054E64E /* FileItem.m in Sources */ = {isa = PBXBuildFile; fileRef = B17610B429AB6E5F0054E64E /* FileItem.m */; };
 		B191D92C29AC953900928464 /* Vue.js 前端开发 快速入门与专业应用.epub in Resources */ = {isa = PBXBuildFile; fileRef = B191D92B29AC953900928464 /* Vue.js 前端开发 快速入门与专业应用.epub */; };
 		B191D92F29ACA50000928464 /* XDSCatalogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B191D92E29ACA50000928464 /* XDSCatalogCell.m */; };
+		B199CB6929AE0133002A48EC /* iCloudHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = B199CB6829AE0133002A48EC /* iCloudHandle.m */; };
+		B199CB6C29AE043D002A48EC /* iCloudDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = B199CB6B29AE043D002A48EC /* iCloudDocument.m */; };
 		ED35F3E522297B1B00E470F2 /* ReadEpubVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED35F3E422297B1B00E470F2 /* ReadEpubVC.m */; };
 		ED35F47222297BAB00E470F2 /* XDSReadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ED35F3EC22297BAB00E470F2 /* XDSReadManager.m */; };
 		ED35F47322297BAB00E470F2 /* XDSReadConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = ED35F3ED22297BAB00E470F2 /* XDSReadConfig.m */; };
@@ -163,6 +165,10 @@
 		B191D92B29AC953900928464 /* Vue.js 前端开发 快速入门与专业应用.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Vue.js 前端开发 快速入门与专业应用.epub"; sourceTree = "<group>"; };
 		B191D92D29ACA50000928464 /* XDSCatalogCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDSCatalogCell.h; sourceTree = "<group>"; };
 		B191D92E29ACA50000928464 /* XDSCatalogCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XDSCatalogCell.m; sourceTree = "<group>"; };
+		B199CB6729AE0133002A48EC /* iCloudHandle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iCloudHandle.h; sourceTree = "<group>"; };
+		B199CB6829AE0133002A48EC /* iCloudHandle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCloudHandle.m; sourceTree = "<group>"; };
+		B199CB6A29AE043D002A48EC /* iCloudDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iCloudDocument.h; sourceTree = "<group>"; };
+		B199CB6B29AE043D002A48EC /* iCloudDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCloudDocument.m; sourceTree = "<group>"; };
 		ED35F3E322297B1B00E470F2 /* ReadEpubVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReadEpubVC.h; sourceTree = "<group>"; };
 		ED35F3E422297B1B00E470F2 /* ReadEpubVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReadEpubVC.m; sourceTree = "<group>"; };
 		ED35F3EB22297BAB00E470F2 /* XDSReadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDSReadOperation.h; sourceTree = "<group>"; };
@@ -372,6 +378,7 @@
 		B176107129AB26530054E64E /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				B199CB6629AE010F002A48EC /* Helper */,
 				B17610AF29AB58090054E64E /* Downloader */,
 				B176107D29AB2B440054E64E /* WKWebViewController */,
 				B176107229AB26670054E64E /* BookSource */,
@@ -419,6 +426,17 @@
 				B17610B429AB6E5F0054E64E /* FileItem.m */,
 			);
 			path = Downloader;
+			sourceTree = "<group>";
+		};
+		B199CB6629AE010F002A48EC /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				B199CB6729AE0133002A48EC /* iCloudHandle.h */,
+				B199CB6829AE0133002A48EC /* iCloudHandle.m */,
+				B199CB6A29AE043D002A48EC /* iCloudDocument.h */,
+				B199CB6B29AE043D002A48EC /* iCloudDocument.m */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		ED35F3E622297BAB00E470F2 /* Resource */ = {
@@ -1021,6 +1039,7 @@
 				ED35F4A322297BAB00E470F2 /* XDSNoteCell.m in Sources */,
 				ED35F48222297BAB00E470F2 /* CXMLNode.m in Sources */,
 				ED35F48422297BAB00E470F2 /* CXMLNode_XPathExtensions.m in Sources */,
+				B199CB6C29AE043D002A48EC /* iCloudDocument.m in Sources */,
 				ED35F47522297BAB00E470F2 /* XDSReaderUtil.m in Sources */,
 				ED35F49122297BAB00E470F2 /* UIView+XDSHyperLink.m in Sources */,
 				ED35F48F22297BAB00E470F2 /* NSString+HTML.m in Sources */,
@@ -1034,6 +1053,7 @@
 				ED35F49F22297BAB00E470F2 /* XDSCatalogueViewController.m in Sources */,
 				ED35F48622297BAB00E470F2 /* CXMLUnsupportedNode.m in Sources */,
 				ED35F48B22297BAB00E470F2 /* CXMLDocument_PrivateExtensions.m in Sources */,
+				B199CB6929AE0133002A48EC /* iCloudHandle.m in Sources */,
 				ED35F48522297BAB00E470F2 /* CXMLNode_PrivateExtensions.m in Sources */,
 				ED35F47C22297BAB00E470F2 /* XDSMagnifierView.m in Sources */,
 				ED35F47722297BAB00E470F2 /* XDSRecordModel.m in Sources */,

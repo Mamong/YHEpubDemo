@@ -59,19 +59,20 @@
     [self.list addObjectsFromArray:epubs];
     [self.list addObjectsFromArray:texts];
 
-
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *downloadDir = [[paths objectAtIndex:0] stringByAppendingString:@"/downloads"];
-    NSURL *downloadPath = [NSURL fileURLWithPath:downloadDir];
-    BOOL isPath = NO;
-    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:downloadDir isDirectory:&isPath];
-    if(!exists || !isPath){
-        [[NSFileManager defaultManager] createDirectoryAtPath:downloadDir withIntermediateDirectories:YES attributes:nil error:nil];
-    }else{
-        NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:downloadDir error:nil];
-        for (NSString *item in items) {
-            NSURL *url = [NSURL fileURLWithPath:item relativeToURL:downloadPath];
-            [self.list addObject:url];
+    for (NSString *name in @[@"downloads",@"imports"]) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *downloadDir = [[paths objectAtIndex:0] stringByAppendingFormat:@"/%@",name];
+        NSURL *downloadPath = [NSURL fileURLWithPath:downloadDir];
+        BOOL isPath = NO;
+        BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:downloadDir isDirectory:&isPath];
+        if(!exists || !isPath){
+            [[NSFileManager defaultManager] createDirectoryAtPath:downloadDir withIntermediateDirectories:YES attributes:nil error:nil];
+        }else{
+            NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:downloadDir error:nil];
+            for (NSString *item in items) {
+                NSURL *url = [NSURL fileURLWithPath:item relativeToURL:downloadPath];
+                [self.list addObject:url];
+            }
         }
     }
 

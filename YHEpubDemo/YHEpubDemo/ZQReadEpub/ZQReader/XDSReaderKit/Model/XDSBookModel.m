@@ -73,7 +73,7 @@ NSString *const kLPPBookInfoModelRightsEncodeKey = @"rights";
 
 
 @interface XDSBookModel()
-@property (nonatomic,copy) NSArray <XDSCatalogueModel*> *catalogs;
+@property (nonatomic,strong) XDSCatalogueModel *catalog;
 
 /** 章节*/
 @property (nonatomic,strong) NSMutableArray<XDSChapterModel*> *chapters;
@@ -94,7 +94,7 @@ NSString *const kXDSBookModelContentEncodeKey = @"content";
 NSString *const kXDSBookModelBookTypeEncodeKey = @"bookType";
 NSString *const kXDSBookModelChaptersEncodeKey = @"chapters";
 NSString *const kXDSBookModelRecordEncodeKey = @"record";
-NSString *const kXDSBookModelCatalogsEncodeKey = @"catalogs";
+NSString *const kXDSBookModelCatalogEncodeKey = @"catalogs";
 
 - (instancetype)initWithContent:(NSString *)content{
     self = [super init];
@@ -122,33 +122,35 @@ NSString *const kXDSBookModelCatalogsEncodeKey = @"catalogs";
     if (self) {
         _bookBasicInfo = [[LPPBookInfoModel alloc] init];
         /** 章节*/
-        NSArray *arr = nil;
-        _chapters = [XDSReadOperation ePubFileHandle:ePubPath bookInfoModel:_bookBasicInfo catalogs:&arr];
-        _catalogs = arr;
+        XDSCatalogueModel *catalog = nil;
+        _chapters = [XDSReadOperation ePubFileHandle:ePubPath bookInfoModel:_bookBasicInfo catalog:&catalog];
+        _catalog = catalog;
 
         //为章节增加目录映射，为目录引用章节数
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        for (XDSCatalogueModel *model in _catalogs) {
-            dict[model.source] = model;
-        }
         for (int i = 0; i < _chapters.count; i++) {
             XDSChapterModel *chapter = _chapters[i];
-            XDSCatalogueModel *catalog = dict[chapter.chapterSrc];
+            chapter.chapterIndex = i;
+            dict[chapter.chapterSrc] = chapter;
+        }
+        for (int i = 0; i < _catalog.children.count; i++) {
+            XDSCatalogueModel *catalog = _catalog.children[i];
             if(catalog){
-                NSMutableArray *catalogs = [NSMutableArray arrayWithObject:catalog];
+                //NSMutableArray *catalogs = [NSMutableArray arrayWithObject:catalog];
                 NSMutableArray *q = [NSMutableArray arrayWithObject:catalog];
                 while (q.count > 0) {
                     XDSCatalogueModel *top = q[0];
-                    top.chapter = i;
+                    XDSChapterModel *chapter = dict[top.source];
+                    top.chapter = chapter.chapterIndex;
                     [q removeObjectAtIndex:0];
                     [q addObjectsFromArray:top.children];
-                    NSInteger idx = [catalogs indexOfObject:top];
-                    if(idx == NSNotFound){
-                        idx = -1;
-                    }
-                    [catalogs insertObjects:top.children atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(idx+1, top.children.count)]];
+//                    NSInteger idx = [catalogs indexOfObject:top];
+//                    if(idx == NSNotFound){
+//                        idx = -1;
+//                    }
+//                    [catalogs insertObjects:top.children atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(idx+1, top.children.count)]];
                 }
-                chapter.catalogueModelArray = catalogs;
+                //chapter.catalogueModelArray = catalogs;
             }
         }
         /** 阅读进度*/
@@ -168,7 +170,7 @@ NSString *const kXDSBookModelCatalogsEncodeKey = @"catalogs";
     [aCoder encodeObject:self.bookBasicInfo forKey:kXDSBookModelBookBasicInfoEncodeKey];
     [aCoder encodeObject:self.content forKey:kXDSBookModelContentEncodeKey];
     [aCoder encodeObject:self.chapters forKey:kXDSBookModelChaptersEncodeKey];
-    [aCoder encodeObject:self.catalogs forKey:kXDSBookModelCatalogsEncodeKey];
+    [aCoder encodeObject:self.catalog forKey:kXDSBookModelCatalogEncodeKey];
     [aCoder encodeObject:self.record forKey:kXDSBookModelRecordEncodeKey];
     [aCoder encodeObject:self.resource forKey:kXDSBookModelResourceEncodeKey];
     [aCoder encodeObject:@(self.bookType) forKey:kXDSBookModelBookTypeEncodeKey];
@@ -180,7 +182,7 @@ NSString *const kXDSBookModelCatalogsEncodeKey = @"catalogs";
         self.bookBasicInfo = [aDecoder decodeObjectForKey:kXDSBookModelBookBasicInfoEncodeKey];
         self.content = [aDecoder decodeObjectForKey:kXDSBookModelContentEncodeKey];
         self.chapters = [aDecoder decodeObjectForKey:kXDSBookModelChaptersEncodeKey];
-        self.catalogs = [aDecoder decodeObjectForKey:kXDSBookModelCatalogsEncodeKey];
+        self.catalog = [aDecoder decodeObjectForKey:kXDSBookModelCatalogEncodeKey];
         self.record = [aDecoder decodeObjectForKey:kXDSBookModelRecordEncodeKey];
         self.resource = [aDecoder decodeObjectForKey:kXDSBookModelResourceEncodeKey];
         self.bookType = [[aDecoder decodeObjectForKey:kXDSBookModelBookTypeEncodeKey] integerValue];
