@@ -9,6 +9,7 @@
 #import "XDSReadPageViewController.h"
 #import "XDSReadMenu.h"
 #import "ZQSpeechMenuView.h"
+#import "XDSReadManager.h"
 
 @interface XDSReadPageViewController ()
 <UIPageViewControllerDelegate,
@@ -149,20 +150,15 @@ XDSReadManagerDelegate
                                   direction:UIPageViewControllerNavigationDirectionForward
                                    animated:NO
                                  completion:^(BOOL finished) {
-//                                     if (finished) {
-//                                         NSInteger i = wself.chapter;
-//                                         NSInteger j = wself.page;
-//                                         [wself.pageViewController setViewControllers:@[[[XDSReadManager sharedManager] readViewWithChapter:&i
-//                                                                                                                                       page:&j
-//                                                                                                                                    pageUrl:nil]] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-//                                     }
                                  }];
 }
+
 - (void)readViewThemeDidChanged{
     XDSReadViewController *readView = _pageViewController.viewControllers.firstObject;
     UIColor *theme = [XDSReadConfig shareInstance].currentTheme?[XDSReadConfig shareInstance].currentTheme:[XDSReadConfig shareInstance].cacheTheme;
     readView.view.backgroundColor = theme;
     readView.readView.backgroundColor = theme;
+    [self.readMenuView setTheme:theme];
 }
 
 - (void)readViewEffectDidChanged{
@@ -190,8 +186,8 @@ XDSReadManagerDelegate
         return;
     }
     XDSReadViewController *readVC = [[XDSReadManager sharedManager] readViewWithChapter:&chapter
-                                                                                   page:&page
-                                                                                pageUrl:nil];
+                    page:&page
+                    pageUrl:nil];
     [_pageViewController setViewControllers:@[readVC]
                                   direction:UIPageViewControllerNavigationDirectionForward
                                    animated:NO

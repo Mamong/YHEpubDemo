@@ -29,23 +29,24 @@ static XDSReadManager *readManager;
     }); 
     return readManager;
 }
-
-+ (CGRect)readViewBounds {
+// FIXME: 修复线程问题
+- (void)updateReadRect{
     CGFloat topPadding = 20;
     CGFloat bottomPadding = 20;
     CGFloat navHeight = 44;
     if (@available(iOS 11.0, *)) {
         UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
         topPadding = window.safeAreaInsets.top;
-        bottomPadding = window.safeAreaInsets.bottom;
+        bottomPadding = window.safeAreaInsets.bottom + 20;
     }
     CGFloat topSafePadding = topPadding + navHeight;
     CGRect bounds = CGRectMake(kReadViewMarginLeft,
                                topSafePadding,
                                DEVICE_MAIN_SCREEN_WIDTH_XDSR-kReadViewMarginLeft-kReadViewMarginRight,
                                DEVICE_MAIN_SCREEN_HEIGHT_XDSR-topSafePadding-bottomPadding);
-    return bounds;
+    _readViewBounds = bounds;
 }
+
 #pragma mark - 获取对于章节页码的 radViewController
 - (XDSReadViewController *)readViewWithChapter:(NSInteger *)chapter
                                           page:(NSInteger *)page
@@ -67,6 +68,7 @@ static XDSReadManager *readManager;
     readView.chapterNum = *chapter;
     readView.pageNum = *page;
     readView.pageUrl = pageUrl;
+    readView.chapterModel = currentChapterModel;
     return readView;
 }
 
@@ -121,12 +123,19 @@ static XDSReadManager *readManager;
         }
     }
     
-    if (CURRENT_RECORD.chapterModel.isReadConfigChanged) {
-        [CURRENT_BOOK_MODEL loadContentInChapter:CURRENT_RECORD.chapterModel];
-    }
-    
-    if (self.rmDelegate && [self.rmDelegate respondsToSelector:@selector(readViewFontDidChanged)]) {
-        [self.rmDelegate readViewFontDidChanged];
+//    if (CURRENT_RECORD.chapterModel.isReadConfigChanged) {
+//        [CURRENT_BOOK_MODEL loadContentInChapter:CURRENT_RECORD.chapterModel];
+//    }
+
+    if ([[XDSReadConfig shareInstance] isReadConfigChanged]) {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            [CURRENT_BOOK_MODEL loadContentForAllChapters];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.rmDelegate && [self.rmDelegate respondsToSelector:@selector(readViewFontDidChanged)]) {
+                    [self.rmDelegate readViewFontDidChanged];
+                }
+            });
+        });
     }
 }
 

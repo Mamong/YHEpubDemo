@@ -36,6 +36,7 @@
 
     self.list = [NSMutableArray array];
     [self loadFiles];
+    [[XDSReadManager sharedManager] updateReadRect];
 }
 
 - (void)viewDidDisappear:(BOOL)animated

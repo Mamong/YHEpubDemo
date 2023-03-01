@@ -17,7 +17,7 @@
 @end
 
 @implementation XDSReadSettingView
-CGFloat const kSettingThemesViewHeight = 74.f;
+CGFloat const kSettingThemesViewHeight = 60.f;
 NSInteger const kSetingThemeButtonTag = 40;
 NSInteger const kSetingEffectButtonTag = 10;
 NSInteger const kSetingFontButtonTag = 20;
@@ -44,6 +44,7 @@ NSInteger const kSetingFontSizeButtonTag = 30;
     //字号
     [self createFontSizeView];
 }
+
 - (void)createThemesView{
     // 创建颜色按钮
     NSInteger count = _themsArray.count;
@@ -59,7 +60,7 @@ NSInteger const kSetingFontSizeButtonTag = 30;
     for (int i = 0; i < count; i ++) {
         UIColor *color = _themsArray[i];
         CGRect frame = CGRectMake(kSpace_xds_15 + (PublicButtonWH + spaceW) * i,
-                                  kSpace_xds_15,
+                                  0,
                                   PublicButtonWH,
                                   PublicButtonWH);
         XDSHaloButton *button = [[XDSHaloButton alloc] initWithFrame:frame haloColor:color];
@@ -74,7 +75,7 @@ NSInteger const kSetingFontSizeButtonTag = 30;
 
 }
 - (void)createEffectView{
-    CGFloat height = (CGRectGetHeight(self.frame) - kSettingThemesViewHeight)/3;
+    CGFloat height = (CGRectGetHeight(self.frame) - 20 - kSettingThemesViewHeight)/3;
     CGFloat originY = kSettingThemesViewHeight;
     // 标题
     CGRect titleFrame = CGRectMake(kSpace_xds_25, originY, 55, height);
@@ -107,7 +108,7 @@ NSInteger const kSetingFontSizeButtonTag = 30;
     }
 }
 - (void)createFontView{
-    CGFloat height = (CGRectGetHeight(self.frame) - kSettingThemesViewHeight)/3;
+    CGFloat height = (CGRectGetHeight(self.frame) - 20 - kSettingThemesViewHeight)/3;
     CGFloat orginY = kSettingThemesViewHeight + height;
     // 标题
     CGRect titleFrame = CGRectMake(kSpace_xds_25, orginY, 55, height);
@@ -140,7 +141,7 @@ NSInteger const kSetingFontSizeButtonTag = 30;
     }
 }
 - (void)createFontSizeView{
-    CGFloat height = (CGRectGetHeight(self.frame) - kSettingThemesViewHeight)/3;
+    CGFloat height = (CGRectGetHeight(self.frame) - 20 - kSettingThemesViewHeight)/3;
     CGFloat orginY = kSettingThemesViewHeight + height * 2;
     // 标题
     CGRect titleFrame = CGRectMake(kSpace_xds_25, orginY, 55, height);

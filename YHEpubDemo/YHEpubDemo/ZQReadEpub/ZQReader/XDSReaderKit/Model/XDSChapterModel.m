@@ -22,6 +22,8 @@ NSString *const kXDSCatalogueModelCatalogIdEncodeKey = @"catalogueId";
 NSString *const kXDSCatalogueModelCatalogueNameEncodeKey = @"catalogueName";
 NSString *const kXDSCatalogueModelLinkEncodeKey = @"link";
 NSString *const kXDSCatalogueModelChapterEncodeKey = @"chapter";
+NSString *const kXDSCatalogueModelPageChapterIndexEncodeKey = @"pageChapterIndex";
+NSString *const kXDSCatalogueModelPageBookIndexEncodeKey = @"pageBookIndex";
 NSString *const kXDSCatalogueModelLevelEncodeKey = @"level";
 NSString *const kXDSCatalogueModelChildrenEncodeKey = @"children";
 NSString *const kXDSCatalogueModelParentEncodeKey = @"parent";
@@ -32,6 +34,8 @@ NSString *const kXDSCatalogueModelParentEncodeKey = @"parent";
     [aCoder encodeObject:self.catalogueName forKey:kXDSCatalogueModelCatalogueNameEncodeKey];
     [aCoder encodeObject:self.link forKey:kXDSCatalogueModelLinkEncodeKey];
     [aCoder encodeInt:(int)self.chapter forKey:kXDSCatalogueModelChapterEncodeKey];
+    [aCoder encodeInt:(int)self.pageChapterIdx forKey:kXDSCatalogueModelPageChapterIndexEncodeKey];
+    [aCoder encodeInt:(int)self.pageBookIdx forKey:kXDSCatalogueModelPageBookIndexEncodeKey];
     [aCoder encodeInt:(int)self.level forKey:kXDSCatalogueModelLevelEncodeKey];
     [aCoder encodeObject:self.children forKey:kXDSCatalogueModelChildrenEncodeKey];
     [aCoder encodeObject:self.parent forKey:kXDSCatalogueModelParentEncodeKey];
@@ -44,6 +48,8 @@ NSString *const kXDSCatalogueModelParentEncodeKey = @"parent";
         self.catalogueName = [aDecoder decodeObjectForKey:kXDSCatalogueModelCatalogueNameEncodeKey];
         self.link = [aDecoder decodeObjectForKey:kXDSCatalogueModelLinkEncodeKey];
         self.chapter = [aDecoder decodeIntForKey:kXDSCatalogueModelChapterEncodeKey];
+        self.pageChapterIdx = [aDecoder decodeIntForKey:kXDSCatalogueModelPageChapterIndexEncodeKey];
+        self.pageBookIdx = [aDecoder decodeIntForKey:kXDSCatalogueModelPageBookIndexEncodeKey];
         self.level = [aDecoder decodeIntForKey:kXDSCatalogueModelLevelEncodeKey];
         self.children = [aDecoder decodeObjectForKey:kXDSCatalogueModelChildrenEncodeKey];
         self.parent = [aDecoder decodeObjectForKey:kXDSCatalogueModelParentEncodeKey];
@@ -129,6 +135,7 @@ NSString *const kXDSCatalogueModelParentEncodeKey = @"parent";
 @implementation XDSChapterModel
 
 NSString *const kXDSChapterModelChapterIndexEncodeKey = @"chapterIndex";
+NSString *const kXDSChapterModelPageNumEncodeKey = @"pageNum";
 NSString *const kXDSChapterModelChapterNameEncodeKey = @"chapterName";
 NSString *const kXDSChapterModelChapterSrcEncodeKey = @"chapterSrc";
 NSString *const kXDSChapterModelOriginContentEncodeKey = @"originContent";
@@ -165,23 +172,22 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
         DTCoreTextLayoutFrame *visibleframe;
         NSInteger rangeOffset = 0;
         do {
-            @autoreleasepool {
-                visibleframe = [layouter layoutFrameWithRect:bounds range:NSMakeRange(rangeOffset, 0)];
-                //visibleframe.lineBreakMode = NSLineBreakByCharWrapping;
-                visibleStringRang = [visibleframe visibleStringRange];
-                //NSAttributedString *subAttStr = [chapterAttributeContent attributedSubstringFromRange:NSMakeRange(visibleStringRang.location, visibleStringRang.length)];
-                //NSMutableAttributedString *mutableAttStr = [[NSMutableAttributedString alloc] initWithAttributedString:subAttStr];
+            visibleframe = [layouter layoutFrameWithRect:bounds range:NSMakeRange(rangeOffset, 0)];
+            //visibleframe.lineBreakMode = NSLineBreakByCharWrapping;
+            visibleStringRang = [visibleframe visibleStringRange];
+            //NSAttributedString *subAttStr = [chapterAttributeContent attributedSubstringFromRange:NSMakeRange(visibleStringRang.location, visibleStringRang.length)];
+            //NSMutableAttributedString *mutableAttStr = [[NSMutableAttributedString alloc] initWithAttributedString:subAttStr];
 
-                //[pageAttributeStrings addObject:mutableAttStr];
+            //[pageAttributeStrings addObject:mutableAttStr];
 
-                NSString *string = [self.chapterContent substringWithRange:visibleStringRang];
-                [pageStrings addObject:string];
-                [pageLocations addObject:@(visibleStringRang.location)];
-                [pageRanges addObject:[NSValue valueWithRange:visibleStringRang]];
-                rangeOffset += visibleStringRang.length;
-            }
-            
+            NSString *string = [self.chapterContent substringWithRange:visibleStringRang];
+            [pageStrings addObject:string];
+            [pageLocations addObject:@(visibleStringRang.location)];
+            [pageRanges addObject:[NSValue valueWithRange:visibleStringRang]];
+            rangeOffset += visibleStringRang.length;
+
         } while (visibleStringRang.location + visibleStringRang.length < chapterAttributeContent.string.length);
+
         
         visibleframe = nil;
         layouter = nil;
@@ -191,6 +197,19 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
         self.pageLocations = pageLocations;
         self.pageRanges = pageRanges;
         self.pageCount = self.pageLocations.count;
+
+        //生成页码
+        for (XDSCatalogueModel *catalog in self.catalogueModelArray) {
+            catalog.pageChapterIdx = [self getPageForCatalog:catalog];
+        }
+        //排序
+        if(self.catalogueModelArray.count >= 2){
+            NSMutableArray *arr = [NSMutableArray arrayWithArray:self.catalogueModelArray];
+            [arr sortUsingComparator:^NSComparisonResult(XDSCatalogueModel  *obj1, XDSCatalogueModel  *obj2) {
+                return [self getCatalogLocation:obj1] < [self getCatalogLocation:obj2] ? NSOrderedAscending: NSOrderedDescending;
+            }];
+            [self setCatalogueModelArray:arr];
+        }
     }
 }
 
@@ -224,7 +243,7 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     NSString *readmePath = @"";
     if (self.chapterSrc.length) {
         //load epub
-        NSString *OEBPSUrl = CURRENT_BOOK_MODEL.bookBasicInfo.OEBPSUrl;
+        NSString *OEBPSUrl = self.book.bookBasicInfo.OEBPSUrl;
         OEBPSUrl = [APP_SANDBOX_DOCUMENT_PATH stringByAppendingString:OEBPSUrl];
         NSString *fileName = [NSString stringWithFormat:@"%@/%@", OEBPSUrl, self.chapterSrc];
         //    // Load HTML data
@@ -235,8 +254,8 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
         html = [html stringByReplacingOccurrencesOfString:@"\r" withString:@"\n"];
         html = [html stringByReplacingOccurrencesOfString:@"\n" withString:@"<p></p>"];
         // 图片异常不渲染问题,注释掉如下 code,放开权限
-//        NSString *imagePath = [@"src=\"" stringByAppendingString:OEBPSUrl];
-//        html = [html stringByReplacingOccurrencesOfString:@"src=\".." withString:imagePath];
+        //        NSString *imagePath = [@"src=\"" stringByAppendingString:OEBPSUrl];
+        //        html = [html stringByReplacingOccurrencesOfString:@"src=\".." withString:imagePath];
         html = [html stringByReplacingOccurrencesOfString:@"<p></p>" withString:@""];
         
     }
@@ -296,9 +315,9 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
                           DTDefaultLinkHighlightColor:@"red",
                           DTDefaultTextColor:textColor,
                           DTDefaultFontName:fontName,
-//                          DTWillFlushBlockCallBack:callBackBlock,
+                          //                          DTWillFlushBlockCallBack:callBackBlock,
                           DTDefaultTextAlignment:@(NSTextAlignmentJustified),
-                          };
+    };
     
     NSMutableDictionary *options = [NSMutableDictionary dictionaryWithDictionary:dic];
     if (readmePath.length) {
@@ -452,9 +471,8 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     NSInteger page = 0;
     for (int i = 0; i < self.pageLocations.count; i ++) {
         NSInteger location = [self.pageLocations[i] integerValue];
-        if (locationInChapter < location) {
-            page = (i > 0)? (i - 1):0;
-            break;
+        if (locationInChapter >= location) {
+            page = i;
         }
     }
     return page;
@@ -472,17 +490,33 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     return 0;
 }
 
+- (NSInteger)getPageForCatalog:(XDSCatalogueModel*)catalog
+{
+    NSInteger location = [self getCatalogLocation:catalog];
+    return [self getPageWithLocationInChapter:location];
+}
+
 - (XDSCatalogueModel *)getCatalogueModelInChapter:(NSInteger)locationInChapter {
     if (self.catalogueModelArray.count && self.locationWithPageIdMapping) {
         XDSCatalogueModel *targetCatalogue = self.catalogueModelArray.firstObject;
         for (XDSCatalogueModel *aCatalogue in self.catalogueModelArray) {
             NSString *idKey = [NSString stringWithFormat:@"${id=%@}", aCatalogue.anchor];
-            NSNumber *location = self.locationWithPageIdMapping[idKey];
-            if (locationInChapter > location.integerValue) {
+            NSInteger location = [self.locationWithPageIdMapping[idKey] integerValue];
+            if (locationInChapter > location) {
                 targetCatalogue = aCatalogue;
             }
         }
         return targetCatalogue;
+    }
+    return nil;
+}
+
+//获取的是开始内容的章节
+- (XDSCatalogueModel *)getCatalogueModelForPage:(NSInteger)page {
+    if(page < self.pageRanges.count){
+        NSRange range = [self.pageRanges[page] rangeValue];
+        NSInteger location = range.location;
+        return [self getCatalogueModelInChapter:location];
     }
     return nil;
 }
@@ -513,7 +547,7 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     XDSReadConfig *shareConfig = [XDSReadConfig shareInstance];
     BOOL isReadConfigChanged = ![_currentConfig isEqual:shareConfig];
     if (isReadConfigChanged) {
-        [shareConfig isReadConfigChanged];
+        //[shareConfig isReadConfigChanged];
         self.currentConfig = shareConfig;
     }
     return isReadConfigChanged;
@@ -529,6 +563,7 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
 -(id)copyWithZone:(NSZone *)zone{
     XDSChapterModel *model = [[XDSChapterModel allocWithZone:zone] init];
     model.chapterIndex = self.chapterIndex;
+    model.pageNum = self.pageNum;
     model.chapterName = self.chapterName;
     model.chapterSrc = self.chapterSrc;
     model.originContent = self.originContent;
@@ -546,7 +581,8 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
     return model;
 }
 -(void)encodeWithCoder:(NSCoder *)aCoder{
-    [aCoder encodeInt:self.chapterIndex forKey:kXDSChapterModelChapterIndexEncodeKey];
+    [aCoder encodeInt64:self.chapterIndex forKey:kXDSChapterModelChapterIndexEncodeKey];
+    [aCoder encodeInt64:self.pageNum forKey:kXDSChapterModelPageNumEncodeKey];
     [aCoder encodeObject:self.chapterName forKey:kXDSChapterModelChapterNameEncodeKey];
     [aCoder encodeObject:self.chapterSrc forKey:kXDSChapterModelChapterSrcEncodeKey];
     [aCoder encodeObject:self.originContent forKey:kXDSChapterModelOriginContentEncodeKey];
@@ -560,7 +596,8 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
 -(id)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.chapterIndex = [aDecoder decodeIntForKey:kXDSChapterModelChapterIndexEncodeKey];
+        self.chapterIndex = [aDecoder decodeInt64ForKey:kXDSChapterModelChapterIndexEncodeKey];
+        self.pageNum = [aDecoder decodeInt64ForKey:kXDSChapterModelPageNumEncodeKey];
         self.chapterName = [aDecoder decodeObjectForKey:kXDSChapterModelChapterNameEncodeKey];
         self.chapterSrc = [aDecoder decodeObjectForKey:kXDSChapterModelChapterSrcEncodeKey];
         self.originContent = [aDecoder decodeObjectForKey:kXDSChapterModelOriginContentEncodeKey];
@@ -581,13 +618,13 @@ NSString *const kXDSChapterModelMarksEncodeKey = @"marks";
 
 
  //NSString *lastString = pageStrings.lastObject;
-//                if(lastString && !([lastString hasSuffix:@"\n"] || [subAttStr.string hasPrefix:@"\n"])){
-//                    NSAttributedString *lastAttr = pageAttributeStrings.lastObject;
-//                    NSRange range = NSMakeRange(0, lastString.length);
-//                    CTParagraphStyleRef paraStyle = (__bridge CTParagraphStyleRef)[lastAttr attribute:NSParagraphStyleAttributeName atIndex:lastString.length-1 longestEffectiveRange:NULL inRange:range];
-//                    DTCoreTextParagraphStyle *paragraphStyle = [DTCoreTextParagraphStyle paragraphStyleWithCTParagraphStyle:paraStyle];
-//                    paragraphStyle.firstLineHeadIndent = paragraphStyle.headIndent;
-//                    NSParagraphStyle *noIndentStyle = [paragraphStyle NSParagraphStyle];
-//                    [mutableAttStr addAttribute:NSParagraphStyleAttributeName value:noIndentStyle range:NSMakeRange(0, 1)];
-//                }
+ //                if(lastString && !([lastString hasSuffix:@"\n"] || [subAttStr.string hasPrefix:@"\n"])){
+ //                    NSAttributedString *lastAttr = pageAttributeStrings.lastObject;
+ //                    NSRange range = NSMakeRange(0, lastString.length);
+ //                    CTParagraphStyleRef paraStyle = (__bridge CTParagraphStyleRef)[lastAttr attribute:NSParagraphStyleAttributeName atIndex:lastString.length-1 longestEffectiveRange:NULL inRange:range];
+ //                    DTCoreTextParagraphStyle *paragraphStyle = [DTCoreTextParagraphStyle paragraphStyleWithCTParagraphStyle:paraStyle];
+ //                    paragraphStyle.firstLineHeadIndent = paragraphStyle.headIndent;
+ //                    NSParagraphStyle *noIndentStyle = [paragraphStyle NSParagraphStyle];
+ //                    [mutableAttStr addAttribute:NSParagraphStyleAttributeName value:noIndentStyle range:NSMakeRange(0, 1)];
+ //                }
  */

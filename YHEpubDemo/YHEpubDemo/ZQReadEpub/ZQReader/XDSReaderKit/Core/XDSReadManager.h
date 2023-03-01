@@ -16,13 +16,15 @@
 @protocol XDSReadManagerDelegate;
 
 @interface XDSReadManager : NSObject
-+ (XDSReadManager *)sharedManager;
 
-+ (CGRect)readViewBounds;
++ (XDSReadManager *)sharedManager;
 
 @property (nonatomic,strong) NSURL *resourceURL;
 @property (nonatomic,strong) XDSBookModel *bookModel;
 @property (nonatomic,weak) id<XDSReadManagerDelegate> rmDelegate;
+@property (nonatomic,assign,readonly) CGRect readViewBounds;
+
+- (void)updateReadRect;
 
 /** 获取对于章节页码的radViewController*/
 - (XDSReadViewController *)readViewWithChapter:(NSInteger *)chapter

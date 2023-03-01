@@ -26,12 +26,13 @@ https://www.jianshu.com/p/298c086cd37c
 - [ ] 书籍下载管理(book download manage)
 - [x] 安全区域适配（safe area support）
 - [ ] 书籍管理(books manage)
-- [ ] 文件打开(file share and open)
+- [ ] 文件分享打开(file share and open)
 - [ ] 字体下载(custom font download)
 - [ ] PDF支持(PDF support)
 - [ ] 支持音频(support audio)
-- [ ] 书籍导入(book import)
-- [ ] 页码生成(generate page number)
-- [ ] 显示章节名(display chapter title)
-- [ ] 深色模式(dark theme)
+- [ ] 书籍wifi导入(book import via wifi)
+- [x] 书籍其他应用打开导入(import from other apps)
+- [x] 页码生成(generate page number)
+- [x] 显示章节名(display chapter title)
+- [ ] 主题切换(theme change)
 

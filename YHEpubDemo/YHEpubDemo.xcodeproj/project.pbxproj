@@ -14,6 +14,7 @@
 		B16E6CFA29A8E04900472F4E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B16E6CF829A8E04900472F4E /* MainInterface.storyboard */; };
 		B16E6CFE29A8E04900472F4E /* YHEpubShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B16E6CF329A8E04800472F4E /* YHEpubShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B16E6D0429A9212000472F4E /* 史铁生-我与地坛.txt in Resources */ = {isa = PBXBuildFile; fileRef = B16E6D0329A9212000472F4E /* 史铁生-我与地坛.txt */; };
+		B16F107A29AF128C00CA9067 /* UIColor+extension.m in Sources */ = {isa = PBXBuildFile; fileRef = B16F107929AF128C00CA9067 /* UIColor+extension.m */; };
 		B176107629AB26AA0054E64E /* BookSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B176107529AB26AA0054E64E /* BookSourceViewController.m */; };
 		B176107929AB2A690054E64E /* WKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B176107829AB2A690054E64E /* WKWebViewController.m */; };
 		B176107C29AB2AEA0054E64E /* WKWebViewControllerEx.m in Sources */ = {isa = PBXBuildFile; fileRef = B176107B29AB2AEA0054E64E /* WKWebViewControllerEx.m */; };
@@ -149,6 +150,8 @@
 		B16E6CF929A8E04900472F4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		B16E6CFB29A8E04900472F4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B16E6D0329A9212000472F4E /* 史铁生-我与地坛.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "史铁生-我与地坛.txt"; sourceTree = "<group>"; };
+		B16F107829AF128C00CA9067 /* UIColor+extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+extension.h"; sourceTree = "<group>"; };
+		B16F107929AF128C00CA9067 /* UIColor+extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+extension.m"; sourceTree = "<group>"; };
 		B176107429AB26AA0054E64E /* BookSourceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookSourceViewController.h; sourceTree = "<group>"; };
 		B176107529AB26AA0054E64E /* BookSourceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookSourceViewController.m; sourceTree = "<group>"; };
 		B176107729AB2A690054E64E /* WKWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WKWebViewController.h; sourceTree = "<group>"; };
@@ -435,6 +438,8 @@
 				B199CB6829AE0133002A48EC /* iCloudHandle.m */,
 				B199CB6A29AE043D002A48EC /* iCloudDocument.h */,
 				B199CB6B29AE043D002A48EC /* iCloudDocument.m */,
+				B16F107829AF128C00CA9067 /* UIColor+extension.h */,
+				B16F107929AF128C00CA9067 /* UIColor+extension.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1019,6 +1024,7 @@
 				ED35F49622297BAB00E470F2 /* XDSPhotoBrowser.m in Sources */,
 				ED35F47322297BAB00E470F2 /* XDSReadConfig.m in Sources */,
 				ED35F48E22297BAB00E470F2 /* CXMLElement.m in Sources */,
+				B16F107A29AF128C00CA9067 /* UIColor+extension.m in Sources */,
 				ED35F4A222297BAB00E470F2 /* XDSNoteViewController.m in Sources */,
 				ED35F47922297BAB00E470F2 /* XDSChapterModel.m in Sources */,
 				ED35F47E22297BAB00E470F2 /* XDSReadView.m in Sources */,

@@ -11,7 +11,7 @@
 @interface XDSReadViewController : UIViewController
 
 @property (strong, nonatomic) XDSReadView *readView;
-
+@property (strong, nonatomic) XDSChapterModel *chapterModel;
 @property (assign, nonatomic) NSInteger chapterNum;//
 @property (assign, nonatomic) NSInteger pageNum;
 @property (copy, nonatomic) NSString *pageUrl;

@@ -67,27 +67,10 @@
     NSString *title = model.catalogueName;
     self.titleLabel.text = title;
     self.titleLabel.textColor = [UIColor darkGrayColor];
-
+    self.numLabel.text = @(model.pageBookIdx).stringValue;
     if (CURRENT_RECORD.chapterModel.chapterIndex == model.chapter) {
-        NSInteger loc = [CURRENT_RECORD.chapterModel getCatalogLocation:model];
-        XDSCatalogueModel *next = model.nextCatalog;
-        NSInteger location = CURRENT_RECORD.location;
-        if(loc <= location){
-            if(next){
-                //同一章节
-                if(model.chapter == next.chapter){
-                    NSInteger nloc = [CURRENT_RECORD.chapterModel getCatalogLocation:next];
-                    if (nloc > location) {
-                        self.titleLabel.textColor = TEXT_COLOR_XDS_2;
-                    }
-                }else{
-                    //非同一章节
-                    self.titleLabel.textColor = TEXT_COLOR_XDS_2;
-                }
-            }else{
-                //没有下一章节
-                self.titleLabel.textColor = TEXT_COLOR_XDS_2;
-            }
+        if([CURRENT_RECORD.chapterModel getCatalogueModelInChapter:CURRENT_RECORD.location] == model){
+            self.titleLabel.textColor = TEXT_COLOR_XDS_2;
         }
     }
     self.moreButtn.selected = model.isExpand;
@@ -120,6 +103,7 @@
 {
     if(!_titleLabel){
         UILabel *label = [[UILabel alloc] init];
+        label.font = [UIFont systemFontOfSize:14];
         _titleLabel = label;
     }
     return _titleLabel;
@@ -129,6 +113,8 @@
 {
     if(!_numLabel){
         UILabel *label = [[UILabel alloc] init];
+        label.font = [UIFont systemFontOfSize:12];
+        label.textColor = [UIColor lightGrayColor];
         _numLabel = label;
     }
     return _numLabel;

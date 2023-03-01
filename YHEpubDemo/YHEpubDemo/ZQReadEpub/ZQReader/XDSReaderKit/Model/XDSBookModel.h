@@ -64,6 +64,7 @@
 + (id)getLocalModelWithURL:(NSURL *)url;
 
 - (void)loadContentInChapter:(XDSChapterModel *)chapterModel;
+
 - (void)loadContentForAllChapters;
 
 - (void)deleteNote:(XDSNoteModel *)noteModel;

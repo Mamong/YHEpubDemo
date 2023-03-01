@@ -212,6 +212,10 @@
                             frame:(CGRect)frame
                           context:(CGContextRef)context
                    forLayoutFrame:(DTCoreTextLayoutFrame *)layoutFrame {
+
+    if(CGSizeEqualToSize(frame.size, CGSizeZero)){
+        return NO;
+    }
     UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(frame,1,1) cornerRadius:10];
     
     CGColorRef color = [textBlock.backgroundColor CGColor];

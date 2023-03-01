@@ -302,6 +302,7 @@
     //章节
     NSArray *itemRefsArray = [opfDoc nodesForXPath:@"//opf:itemref" namespaceMappings:[NSDictionary dictionaryWithObject:@"http://www.idpf.org/2007/opf" forKey:@"opf"] error:nil];
     NSMutableArray *chapters = [NSMutableArray array];
+    int i = 0;
     for (CXMLElement* element in itemRefsArray){
         NSString *idref = [[element attributeForName:@"idref"] stringValue];
         NSString* chapHref = [itemDictionary valueForKey:idref];
@@ -316,7 +317,7 @@
         XDSChapterModel *chapter = [[XDSChapterModel alloc] init];
         chapter.chapterName = chapterName;
         chapter.chapterSrc = chapHref;
-        //chapter.idref = idref;
+        chapter.chapterIndex = i++;
         [chapters addObject:chapter];
     }
     return chapters;

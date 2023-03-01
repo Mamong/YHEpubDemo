@@ -13,4 +13,5 @@
 
 - (void)updateReadRecord;
 
+- (void)setTheme:(UIColor*)color;
 @end

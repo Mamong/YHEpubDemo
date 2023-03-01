@@ -13,6 +13,7 @@
 #import "XDSLightView.h"
 #import "XDSCatalogueView.h"
 #import <Masonry/Masonry.h>
+#import "UIColor+extension.h"
 
 /// 阅读页面动画的时间
 CGFloat const kXDSReadMenuAnimateDuration = 0.2f;
@@ -91,6 +92,7 @@ XDSCatalogueViewDelegate
     //left view
     [self createLeftView];
 }
+
 //TODO: -- Top View
 - (void)createMenuTopView{
     CGRect frame = CGRectMake(0, -kNavgationBarHeight, DEVICE_MAIN_SCREEN_WIDTH_XDSR, kNavgationBarHeight);
@@ -146,6 +148,15 @@ XDSCatalogueViewDelegate
     self.leftView.hidden = YES;
     [self addSubview:self.leftView];
 }
+
+- (void)setTheme:(UIColor*)color
+{
+    self.topView.backgroundColor = color;
+    self.bottomView.backgroundColor = color;
+    BOOL isLighterColor = [color isLighterColor];
+}
+
+
 //MARK: - ABOUT UI
 - (void)createUI{
     
@@ -201,7 +212,6 @@ XDSCatalogueViewDelegate
 }
 - (void)readSettingView:(XDSReadSettingView *)readSettingView didSelectedFontSize:(BOOL)plusSize{
     [[XDSReadManager sharedManager] configReadFontSize:plusSize];
-//    _fontLabel.text = @([XDSReadConfig shareInstance].fontSize).stringValue;
 }
 
 
@@ -335,10 +345,10 @@ XDSCatalogueViewDelegate
     [self needsUpdateConstraints];
 
     if (CGRectGetMinY(self.readSettingView.frame) < DEVICE_MAIN_SCREEN_HEIGHT_XDSR) {
-        //设置页面隐藏时，刷新一遍全文章节
-        if ([[XDSReadConfig shareInstance] isReadConfigChanged]) {
-            [CURRENT_BOOK_MODEL loadContentForAllChapters];
-        }
+        //设置页面隐藏时，刷新一遍全文章节，需要重新计算页码
+//        if ([[XDSReadConfig shareInstance] isReadConfigChanged]) {
+//            [CURRENT_BOOK_MODEL loadContentForAllChapters];
+//        }
         [UIView animateWithDuration:kXDSReadMenuAnimateDuration animations:^{
             self.readSettingView.frame = settingViewFrame;
             self.topViewBottomConstraint.offset = -100;

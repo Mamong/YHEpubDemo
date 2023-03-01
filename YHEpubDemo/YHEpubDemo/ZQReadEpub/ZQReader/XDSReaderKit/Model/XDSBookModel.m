@@ -73,6 +73,8 @@ NSString *const kLPPBookInfoModelRightsEncodeKey = @"rights";
 
 
 @interface XDSBookModel()
+
+/** 目录*/
 @property (nonatomic,strong) XDSCatalogueModel *catalog;
 
 /** 章节*/
@@ -130,29 +132,26 @@ NSString *const kXDSBookModelCatalogEncodeKey = @"catalogs";
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         for (int i = 0; i < _chapters.count; i++) {
             XDSChapterModel *chapter = _chapters[i];
-            chapter.chapterIndex = i;
             dict[chapter.chapterSrc] = chapter;
         }
-        for (int i = 0; i < _catalog.children.count; i++) {
-            XDSCatalogueModel *catalog = _catalog.children[i];
-            if(catalog){
-                //NSMutableArray *catalogs = [NSMutableArray arrayWithObject:catalog];
-                NSMutableArray *q = [NSMutableArray arrayWithObject:catalog];
-                while (q.count > 0) {
-                    XDSCatalogueModel *top = q[0];
-                    XDSChapterModel *chapter = dict[top.source];
-                    top.chapter = chapter.chapterIndex;
-                    [q removeObjectAtIndex:0];
-                    [q addObjectsFromArray:top.children];
-//                    NSInteger idx = [catalogs indexOfObject:top];
-//                    if(idx == NSNotFound){
-//                        idx = -1;
-//                    }
-//                    [catalogs insertObjects:top.children atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(idx+1, top.children.count)]];
-                }
-                //chapter.catalogueModelArray = catalogs;
+
+        NSMutableArray *q = [NSMutableArray arrayWithArray:catalog.children];
+        while (q.count > 0) {
+            XDSCatalogueModel *top = q[0];
+            XDSChapterModel *chapter = dict[top.source];
+            top.chapter = chapter.chapterIndex;
+            if(!chapter.catalogueModelArray){
+                [chapter setCatalogueModelArray:[NSMutableArray arrayWithObject:top]];
+            }else{
+                NSMutableArray *arr = (NSMutableArray *)chapter.catalogueModelArray;
+                [arr addObject:top];
             }
+            [q removeObjectAtIndex:0];
+            [q addObjectsFromArray:top.children];
         }
+
+        [self loadContentForAllChapters];
+
         /** 阅读进度*/
         _record = [[XDSRecordModel alloc] init];
         _record.chapterModel = _chapters.firstObject;
@@ -243,35 +242,57 @@ NSString *const kXDSBookModelCatalogEncodeKey = @"catalogs";
 - (void)loadContentInChapter:(XDSChapterModel *)chapterModel {
     //load content for current chapter first
     CGRect bounds = CGRectZero;
-    bounds.size = [XDSReadManager readViewBounds].size;
+    bounds.size = [XDSReadManager sharedManager].readViewBounds.size;
+    chapterModel.book = self;
     [chapterModel paginateEpubWithBounds:bounds];
 }
 
-- (void)loadContentForAllChapters {
-    if (![[XDSReadConfig shareInstance] isReadConfigChanged]) {
-        return;
-    }
-    NSInteger index = [self.chapters indexOfObject:CURRENT_RECORD.chapterModel];
-    if (index == 0 || index + 1 >= self.chapters.count) {
-        return;
-    }
-    
-    dispatch_queue_t queue = dispatch_queue_create("loadContentForAllChapters", DISPATCH_QUEUE_SERIAL);
-    for (NSInteger i = index + 1; i < self.chapters.count; i ++) {
+//- (void)loadContentForAllChapters {
+//    NSInteger index = [self.chapters indexOfObject:CURRENT_RECORD.chapterModel];
+//    if (index == 0 || index + 1 >= self.chapters.count) {
+//        return;
+//    }
+//
+//    dispatch_queue_t queue = dispatch_queue_create("loadContentForAllChapters", DISPATCH_QUEUE_SERIAL);
+//    for (NSInteger i = index + 1; i < self.chapters.count; i ++) {
+//        XDSChapterModel *theChapterModel = self.chapters[i];
+//        dispatch_async(queue, ^{
+//            [self loadContentInChapter:theChapterModel];
+//        });
+//
+//    }
+//
+//    for (NSInteger i = index - 1; i >= 0; i --) {
+//        XDSChapterModel *theChapterModel = self.chapters[i];
+//        dispatch_async(queue, ^{
+//            [self loadContentInChapter:theChapterModel];
+//        });
+//    }
+//}
+
+- (void)loadContentForAllChapters{
+    dispatch_queue_t queue = dispatch_queue_create("loadContentForAllChapters", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_group_t group = dispatch_group_create();
+
+    for (NSInteger i = 0; i < self.chapters.count; i ++) {
         XDSChapterModel *theChapterModel = self.chapters[i];
-        dispatch_async(queue, ^{
+        dispatch_group_async(group, queue, ^{
             [self loadContentInChapter:theChapterModel];
         });
-        
     }
-    
-    for (NSInteger i = index - 1; i >= 0; i --) {
-        XDSChapterModel *theChapterModel = self.chapters[i];
-        dispatch_async(queue, ^{
-            [self loadContentInChapter:theChapterModel];
-        });
-    }
-    
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+//    dispatch_group_notify(group, queue, ^{
+        NSInteger idx = 1;
+        for (NSInteger i = 0; i < self.chapters.count; i ++) {
+            XDSChapterModel *theChapterModel = self.chapters[i];
+            theChapterModel.pageNum = idx;
+            for(int j = 0; j < theChapterModel.catalogueModelArray.count; j++){
+                XDSCatalogueModel *catalog = theChapterModel.catalogueModelArray[j];
+                catalog.pageBookIdx = catalog.pageChapterIdx + theChapterModel.pageNum;
+            }
+            idx += theChapterModel.pageCount;
+        }
+//    });
 }
 
 //TODO: Notes
@@ -316,6 +337,7 @@ NSString *const kXDSBookModelCatalogEncodeKey = @"catalogs";
 - (void)deleteMark:(XDSMarkModel *)markModel{
     [self addMark:markModel];
 }
+
 - (void)addMark:(XDSMarkModel *)markModel{
     XDSChapterModel *chapterModel = self.chapters[markModel.chapter];
     
