@@ -147,7 +147,7 @@ typedef NSUInteger DTAttributedTextContentViewRelayoutMask;
 	NSAttributedString *_truncationString;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame range:(NSRange)range;
+- (instancetype)initWithFrame:(CGRect)frame;
 /**
  @name Sizing
  */

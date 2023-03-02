@@ -100,7 +100,7 @@
     // we draw images and links via subviews provided by delegate methods
     [self.readTextView removeFromSuperview];
     
-    self.readTextView = [[DTAttributedTextContentView alloc] initWithFrame:frame range:_pageRange];
+    self.readTextView = [[DTAttributedTextContentView alloc] initWithFrame:frame];
     self.readTextView.shouldDrawImages = YES;
     self.readTextView.shouldDrawLinks = YES;
     self.readTextView.layoutFrameHeightIsConstrainedByBounds = YES;
@@ -109,6 +109,10 @@
     //self.readTextView.lineBreakMode = NSLineBreakByCharWrapping;
     [self addSubview:self.readTextView];
     self.readTextView.attributedString = self.readAttributedContent;
+    CGRect rect = UIEdgeInsetsInsetRect(self.readTextView.bounds, self.readTextView.edgeInsets);
+
+    DTCoreTextLayoutFrame *layoutFrame = [self.readTextView.layouter layoutFrameWithRect:rect range:_pageRange];
+    self.readTextView.layoutFrame = layoutFrame;
 }
 
 

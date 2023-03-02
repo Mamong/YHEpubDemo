@@ -8,8 +8,8 @@ important: I use the DTCoreText with my patch.
 DTCoreText请使用仓库内的修改版本。
 
 ![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/1.gif)
-![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/1.png) 
-![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/2.png)
+![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/1.png)  
+![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/2.png) 
 
 具体 demo 的配置与使用详见博客，有什么问题欢迎留言交流.
 
