@@ -3,20 +3,12 @@ a reader that uses [DTCoretext](https://github.com/Cocoanetics/DTCoreText) to re
 
 一款使用[DTCoreText](https://github.com/Cocoanetics/DTCoreText)进行页面渲染的阅读器，当前支持TXT和Epub格式。
 
-important: I use the DTCoreText with my patch.
-
-DTCoreText请使用仓库内的修改版本。
-
 ![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/1.gif)
 ![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/1.png)  
 ![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/2.png) 
 
-具体 demo 的配置与使用详见博客，有什么问题欢迎留言交流.
 
-https://blog.csdn.net/survivorsfyh/article/details/88070756
-
-https://www.jianshu.com/p/298c086cd37c
-
+下一步将进行重构，将epub解析、渲染、阅读功能模块化。
 
 ## todo list
 - [x] 支持滚动翻页(support scroll page)
@@ -30,7 +22,7 @@ https://www.jianshu.com/p/298c086cd37c
 - [ ] 文件分享打开(file share and open)
 - [ ] 字体下载(custom font download)
 - [ ] PDF支持(PDF support)
-- [ ] 支持音频(support audio)
+- [ ] 支持smil音频(support smil audio)
 - [ ] 书籍wifi导入(book import via wifi)
 - [x] 书籍其他应用打开导入(import from other apps)
 - [x] 页码生成(generate page number)
