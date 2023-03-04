@@ -769,6 +769,13 @@ static BOOL _DTCoreTextLayoutFramesShouldDrawDebugFrames = NO;
 			else
 			{
 				// doesn't fit any more
+                if(typesetLines.count == 0){
+                    [typesetLines addObject:newLine];
+                    fittingLength += lineRange.length;
+
+                    lineRange.location += lineRange.length;
+                    previousLine = newLine;
+                }
 				break;
 			}
 		}

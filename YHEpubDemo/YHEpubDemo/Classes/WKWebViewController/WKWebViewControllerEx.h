@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)clearCache;
 
-- (BOOL)shouldDownloadFile:(NSURL*)url name:(NSURL*)name;
+- (BOOL)shouldDownloadFile:(NSURL*)url name:(NSString*)name;
 @end
 
 NS_ASSUME_NONNULL_END
