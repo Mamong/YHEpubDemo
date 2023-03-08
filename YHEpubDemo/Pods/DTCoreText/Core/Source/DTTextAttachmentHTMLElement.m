@@ -108,6 +108,12 @@
 		CGFloat scale = (CGFloat)([[widthString substringToIndex:widthString.length - 1] floatValue] / 100.0);
 		
 		_size.width = _maxDisplaySize.width * scale;
+        if([heightString isEqualToString:@"auto"]){
+            CGSize originalSize = _textAttachment.originalSize;
+            if(!CGSizeEqualToSize(originalSize, CGSizeZero)){
+                _size.height = _size.width * originalSize.height/ originalSize.width;
+            }
+        }
 	}
 	
 	if (heightString.length > 1 && [heightString hasSuffix:@"%"])
@@ -115,6 +121,12 @@
 		CGFloat scale = (CGFloat)([[heightString substringToIndex:heightString.length - 1] floatValue] / 100.0);
 		
 		_size.height = _maxDisplaySize.height * scale;
+        if([heightString isEqualToString:@"auto"]){
+            CGSize originalSize = _textAttachment.originalSize;
+            if(!CGSizeEqualToSize(originalSize, CGSizeZero)){
+                _size.width = _size.height * originalSize.width/ originalSize.height;
+            }
+        }
 	}
 	// update the display size
 	[_textAttachment setDisplaySize:_size withMaxDisplaySize:_maxDisplaySize];
