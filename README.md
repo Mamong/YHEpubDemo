@@ -4,6 +4,10 @@ a reader that uses [DTCoretext](https://github.com/Cocoanetics/DTCoreText) to re
 一款使用[DTCoreText](https://github.com/Cocoanetics/DTCoreText)进行页面渲染的阅读器，当前支持TXT和Epub格式。
 
 ![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/1.gif)
+
+2024年1月7日 新增垂直滚动：暂时不能完美翻章节和追踪当前页数
+![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/4.gif)
+
 ![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/1.png)  
 ![](https://raw.githubusercontent.com/Mamong/YHEpubDemo/master/screenshot/2.png) 
 
