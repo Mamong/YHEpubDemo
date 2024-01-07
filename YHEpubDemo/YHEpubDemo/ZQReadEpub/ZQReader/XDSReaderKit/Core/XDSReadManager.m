@@ -50,7 +50,9 @@ static XDSReadManager *readManager;
 #pragma mark - 获取对于章节页码的 radViewController
 - (XDSReadViewController *)readViewWithChapter:(NSInteger *)chapter
                                           page:(NSInteger *)page
-                                       pageUrl:(NSString *)pageUrl{
+                                       pageUrl:(NSString *)pageUrl
+                                        canScroll:(BOOL)canScroll
+{
     
     XDSChapterModel *currentChapterModel = _bookModel.chapters[*chapter];
     if (currentChapterModel.isReadConfigChanged) {
@@ -69,6 +71,7 @@ static XDSReadManager *readManager;
     readView.pageNum = *page;
     readView.pageUrl = pageUrl;
     readView.chapterModel = currentChapterModel;
+    readView.canScroll = canScroll;
     return readView;
 }
 

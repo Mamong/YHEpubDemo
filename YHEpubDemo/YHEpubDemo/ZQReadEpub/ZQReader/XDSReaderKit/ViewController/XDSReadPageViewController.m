@@ -77,11 +77,15 @@ XDSReadManagerDelegate
     
     _chapter = CURRENT_RECORD.currentChapter;
     _page = CURRENT_RECORD.currentPage;
-  
+    NSInteger effect = [XDSReadConfig shareInstance].currentEffect;
     XDSReadViewController *readVC = [[XDSReadManager sharedManager] readViewWithChapter:&_chapter
                                                                                    page:&_page
-                                                                                pageUrl:nil];
-
+                                                                                pageUrl:nil
+                                     canScroll:effect==3
+    ];
+//    [self addChildViewController:readVC];
+//    [self.view addSubview:readVC.view];
+//    return;
     [_pageViewController setViewControllers:@[readVC]
                                   direction:UIPageViewControllerNavigationDirectionForward
                                    animated:YES
@@ -118,8 +122,8 @@ XDSReadManagerDelegate
         }else if(effect == 2){
             style = UIPageViewControllerTransitionStyleScroll;
             orientation = UIPageViewControllerNavigationOrientationHorizontal;
-        }else if(effect == 2){
-            style = UIPageViewControllerTransitionStyleScroll;
+        }else if(effect == 3){
+            style = UIPageViewControllerTransitionStylePageCurl;
             orientation = UIPageViewControllerNavigationOrientationVertical;
         }
         _pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:style
@@ -141,9 +145,12 @@ XDSReadManagerDelegate
 - (void)readViewFontDidChanged {
     _chapter = CURRENT_RECORD.currentChapter;
     _page = CURRENT_RECORD.currentPage;
+    NSInteger effect = [XDSReadConfig shareInstance].currentEffect;
     XDSReadViewController *readVC = [[XDSReadManager sharedManager] readViewWithChapter:&_chapter
                                                                                    page:&_page
-                                                                                pageUrl:nil];
+                                                                                pageUrl:nil
+                                     canScroll:effect==3
+    ];
 //    __weak typeof(self) wself = self;
 
     [_pageViewController setViewControllers:@[readVC]
@@ -172,8 +179,10 @@ XDSReadManagerDelegate
     NSInteger effect = [XDSReadConfig shareInstance].currentEffect;
     UIPageViewControllerNavigationDirection direction = effect % 2 == 1 ? UIPageViewControllerNavigationDirectionReverse : UIPageViewControllerNavigationDirectionForward;
     XDSReadViewController *readVC = [[XDSReadManager sharedManager] readViewWithChapter:&_chapter
-                                                                                   page:&_page
-                                                                                pageUrl:nil];
+                    page:&_page
+                    pageUrl:nil
+                  canScroll:effect==3
+    ];
 
     [_pageViewController setViewControllers:@[readVC]
                                   direction:direction
@@ -185,9 +194,10 @@ XDSReadManagerDelegate
     if (chapter<0) {
         return;
     }
+    NSInteger effect = [XDSReadConfig shareInstance].currentEffect;
     XDSReadViewController *readVC = [[XDSReadManager sharedManager] readViewWithChapter:&chapter
                     page:&page
-                    pageUrl:nil];
+                    pageUrl:nil canScroll:effect==3];
     [_pageViewController setViewControllers:@[readVC]
                                   direction:UIPageViewControllerNavigationDirectionForward
                                    animated:NO
@@ -234,14 +244,21 @@ XDSReadManagerDelegate
     }
     
     
-    if (_pageChange == 0) {
+
+    NSInteger effect = [XDSReadConfig shareInstance].currentEffect;
+    if(effect==3){
         _chapterChange--;
+        _pageChange = 0;
+    }else{
+        if (_pageChange == 0) {
+            _chapterChange--;
+        }
+        _pageChange--;
     }
-    _pageChange--;
-    
+
     return [[XDSReadManager sharedManager] readViewWithChapter:&_chapterChange
                                                           page:&_pageChange
-                                                       pageUrl:nil];
+                                                       pageUrl:nil canScroll:effect==3];
 }
 - (nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController
                 viewControllerAfterViewController:(UIViewController *)viewController{
@@ -262,17 +279,23 @@ XDSReadManagerDelegate
         [self showToolMenu];//已经是最后一页了，显示菜单准备返回
         return nil;
     }
-    if (_pageChange == CURRENT_RECORD.totalPage-1) {
+
+    NSInteger effect = [XDSReadConfig shareInstance].currentEffect;
+    if(effect==3){
         _chapterChange++;
         _pageChange = 0;
     }else{
-        _pageChange++;
+        if (_pageChange == CURRENT_RECORD.totalPage-1) {
+            _chapterChange++;
+            _pageChange = 0;
+        }else{
+            _pageChange++;
+        }
     }
-    
     
     return [[XDSReadManager sharedManager] readViewWithChapter:&_chapterChange
                                                           page:&_pageChange
-                                                       pageUrl:nil];
+                                                       pageUrl:nil canScroll:effect==3];
 }
 
 #pragma mark -PageViewController Delegate

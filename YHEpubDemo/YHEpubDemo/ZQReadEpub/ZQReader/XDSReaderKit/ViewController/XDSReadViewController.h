@@ -15,12 +15,13 @@
 @property (assign, nonatomic) NSInteger chapterNum;//
 @property (assign, nonatomic) NSInteger pageNum;
 @property (copy, nonatomic) NSString *pageUrl;
+@property (assign, nonatomic) BOOL canScroll;
 
 
 /*
  * 通过章节号与章节内的页码进行初始化
  */
-- (instancetype)initWithChapterNumber:(NSInteger)chapterNum pageNumber:(NSInteger)pageNum;
+- (instancetype)initWithChapterNumber:(NSInteger)chapterNum pageNumber:(NSInteger)pageNum canScroll:(BOOL)canScroll;
 
 
 ///*

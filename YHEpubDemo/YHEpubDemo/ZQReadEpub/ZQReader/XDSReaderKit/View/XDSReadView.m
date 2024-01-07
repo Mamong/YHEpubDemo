@@ -35,7 +35,8 @@
 
 @property (nonatomic,strong) XDSMagnifierView *magnifierView;
 
-@property (strong, nonatomic) DTAttributedTextContentView *readTextView;
+//@property (strong, nonatomic) DTAttributedTextContentView *readTextView;
+@property (strong, nonatomic) DTAttributedTextView *readTextView;
 
 @property (nonatomic, strong) NSMutableAttributedString *readAttributedContent;
 
@@ -43,14 +44,17 @@
 
 @property (assign, nonatomic) NSInteger chapterNum;//
 @property (assign, nonatomic) NSInteger pageNum;
+@property (assign, nonatomic) BOOL canScroll;
+
 @end
 @implementation XDSReadView
 
 //MARK: -  override super method
-- (instancetype)initWithFrame:(CGRect)frame chapterNum:(NSInteger)chapterNum pageNum:(NSInteger)pageNum {
+- (instancetype)initWithFrame:(CGRect)frame chapterNum:(NSInteger)chapterNum pageNum:(NSInteger)pageNum canScroll:(BOOL)canScroll{
     if (self = [super initWithFrame:frame]) {
         self.chapterNum = chapterNum;
         self.pageNum = pageNum;
+        self.canScroll = canScroll;
         XDSChapterModel *chapterModel = CURRENT_BOOK_MODEL.chapters[self.chapterNum];
         //NSMutableAttributedString *pageAttributeString = chapterModel.pageAttributeStrings[self.pageNum];
         NSMutableAttributedString *pageAttributeString = chapterModel.chapterAttributeContent;
@@ -100,19 +104,37 @@
     // we draw images and links via subviews provided by delegate methods
     [self.readTextView removeFromSuperview];
     
-    self.readTextView = [[DTAttributedTextContentView alloc] initWithFrame:frame];
+//    self.readTextView = [[DTAttributedTextContentView alloc] initWithFrame:frame];
+//    self.readTextView.shouldDrawImages = YES;
+//    self.readTextView.shouldDrawLinks = YES;
+//    self.readTextView.layoutFrameHeightIsConstrainedByBounds = YES;
+//    self.readTextView.delegate = self; // delegate for custom sub views
+//    self.readTextView.backgroundColor = [UIColor clearColor];
+//    //self.readTextView.lineBreakMode = NSLineBreakByCharWrapping;
+//    [self addSubview:self.readTextView];
+//    self.readTextView.attributedString = self.readAttributedContent;
+//    CGRect rect = UIEdgeInsetsInsetRect(self.readTextView.bounds, self.readTextView.edgeInsets);
+//
+//    DTCoreTextLayoutFrame *layoutFrame = [self.readTextView.layouter layoutFrameWithRect:rect range:_pageRange];
+//    self.readTextView.layoutFrame = layoutFrame;
+
+    self.readTextView = [[DTAttributedTextView alloc] initWithFrame:frame];
     self.readTextView.shouldDrawImages = YES;
     self.readTextView.shouldDrawLinks = YES;
-    self.readTextView.layoutFrameHeightIsConstrainedByBounds = YES;
-    self.readTextView.delegate = self; // delegate for custom sub views
-    self.readTextView.backgroundColor = [UIColor clearColor];
+    self.readTextView.attributedTextContentView.layoutFrameHeightIsConstrainedByBounds = !self.canScroll;
+    self.readTextView.textDelegate = self; // delegate for custom sub views
+    self.readTextView.attributedTextContentView.backgroundColor = [UIColor clearColor];
     //self.readTextView.lineBreakMode = NSLineBreakByCharWrapping;
     [self addSubview:self.readTextView];
     self.readTextView.attributedString = self.readAttributedContent;
-    CGRect rect = UIEdgeInsetsInsetRect(self.readTextView.bounds, self.readTextView.edgeInsets);
+    if(!self.canScroll){
+        CGRect rect = UIEdgeInsetsInsetRect(self.readTextView.bounds, self.readTextView.attributedTextContentView.edgeInsets);
 
-    DTCoreTextLayoutFrame *layoutFrame = [self.readTextView.layouter layoutFrameWithRect:rect range:_pageRange];
-    self.readTextView.layoutFrame = layoutFrame;
+        DTCoreTextLayoutFrame *layoutFrame = [self.readTextView.attributedTextContentView.layouter layoutFrameWithRect:rect range:_pageRange];
+        self.readTextView.attributedTextContentView.layoutFrame = layoutFrame;
+    }else{
+        [self.readTextView scrollRangeToVisible:_pageRange animated:NO];
+    }
 }
 
 
@@ -673,7 +695,7 @@
 //=============================
 - (CGRect)parserRectWithPoint:(CGPoint)point range:(NSRange *)selectRange{
     
-    DTCoreTextLayoutFrame *visibleframe = self.readTextView.layoutFrame;
+    DTCoreTextLayoutFrame *visibleframe = self.readTextView.attributedTextContentView.layoutFrame;
     NSArray *linse = visibleframe.lines;
     CGRect rect = CGRectZero;
     if (nil == linse) {
@@ -715,7 +737,7 @@
                            range:(NSRange *)selectRange
                            paths:(NSArray *)paths
                  isDirectionRight:(BOOL)isDirectionRight{
-    DTCoreTextLayoutFrame *visibleframe = self.readTextView.layoutFrame;
+    DTCoreTextLayoutFrame *visibleframe = self.readTextView.attributedTextContentView.layoutFrame;
     NSArray *linse = visibleframe.lines;
     if (nil == linse || linse.count < 1) {
         return paths;

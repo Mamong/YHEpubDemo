@@ -247,7 +247,9 @@ NSInteger const kSetingFontSizeButtonTag = 30;
                         READ_BACKGROUND_COLOC_5];
     self.effectArray = @[@{@"name":@"水平仿真",@"effect":@"0"},
                          @{@"name":@"垂直仿真",@"effect":@"1"},
-                         @{@"name":@"水平滚动",@"effect":@"2"}];
+                         @{@"name":@"水平滚动",@"effect":@"2"},
+                         @{@"name":@"垂直滚动",@"effect":@"3"},
+    ];
 
     
     self.fontArray = @[@{@"name":@"系统",@"font":@""},

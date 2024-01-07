@@ -18,10 +18,14 @@
 @end
 
 @implementation XDSReadViewController
-- (instancetype)initWithChapterNumber:(NSInteger)chapterNum pageNumber:(NSInteger)pageNum {
+- (instancetype)initWithChapterNumber:(NSInteger)chapterNum
+                           pageNumber:(NSInteger)pageNum
+                            canScroll:(BOOL)canScroll
+{
     if (self = [super init]) {
         self.chapterNum = chapterNum;
         self.pageNum = pageNum;
+        self.canScroll = canScroll;
     }
     return self;
 }
@@ -37,7 +41,7 @@
     self.view.backgroundColor = [XDSReadConfig shareInstance].currentTheme?[XDSReadConfig shareInstance].currentTheme:[XDSReadConfig shareInstance].cacheTheme;
 
     CGRect frame = [XDSReadManager sharedManager].readViewBounds;
-    self.readView = [[XDSReadView alloc] initWithFrame:frame chapterNum:self.chapterNum pageNum:self.pageNum];
+    self.readView = [[XDSReadView alloc] initWithFrame:frame chapterNum:self.chapterNum pageNum:self.pageNum canScroll:self.canScroll];
     self.readView.backgroundColor = self.view.backgroundColor;
     [self.view addSubview:self.readView];
 

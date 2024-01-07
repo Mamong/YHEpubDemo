@@ -12,7 +12,7 @@
 
 @interface XDSReadView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame chapterNum:(NSInteger)chapterNum pageNum:(NSInteger)pageNum;
+- (instancetype)initWithFrame:(CGRect)frame chapterNum:(NSInteger)chapterNum pageNum:(NSInteger)pageNum canScroll:(BOOL)canScroll;
 
 - (void)cancelSelected;
 

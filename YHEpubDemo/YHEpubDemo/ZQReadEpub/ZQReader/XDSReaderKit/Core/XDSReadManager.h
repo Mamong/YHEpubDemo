@@ -29,7 +29,8 @@
 /** 获取对于章节页码的radViewController*/
 - (XDSReadViewController *)readViewWithChapter:(NSInteger *)chapter
                                           page:(NSInteger *)page
-                                       pageUrl:(NSString *)pageUrl;
+                                       pageUrl:(NSString *)pageUrl
+                                        canScroll:(BOOL)canScroll;
 
 /** 跳转到指定章节（上一章，下一章，slider，目录）*/
 - (void)readViewJumpToChapter:(NSInteger)chapter page:(NSInteger)page;
